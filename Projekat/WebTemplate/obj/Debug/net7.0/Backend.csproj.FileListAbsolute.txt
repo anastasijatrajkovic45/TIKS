@@ -1,0 +1,7 @@
+C:\Users\ANASTASIJA\Desktop\Fakultet\VII semestar\Testiranje i kvalitet softvera\Projekat\Backend\obj\Debug\net7.0\Backend.csproj.AssemblyReference.cache
+C:\Users\ANASTASIJA\Desktop\Fakultet\VII semestar\Testiranje i kvalitet softvera\Projekat\Backend\obj\Debug\net7.0\Backend.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ANASTASIJA\Desktop\Fakultet\VII semestar\Testiranje i kvalitet softvera\Projekat\Backend\obj\Debug\net7.0\Backend.AssemblyInfoInputs.cache
+C:\Users\ANASTASIJA\Desktop\Fakultet\VII semestar\Testiranje i kvalitet softvera\Projekat\Backend\obj\Debug\net7.0\Backend.AssemblyInfo.cs
+C:\Users\ANASTASIJA\Desktop\Fakultet\VII semestar\Testiranje i kvalitet softvera\Projekat\Backend\obj\Debug\net7.0\Backend.csproj.CoreCompileInputs.cache
+C:\Users\ANASTASIJA\Desktop\Fakultet\VII semestar\Testiranje i kvalitet softvera\Projekat\Backend\obj\Debug\net7.0\Backend.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\ANASTASIJA\Desktop\Fakultet\VII semestar\Testiranje i kvalitet softvera\Projekat\Backend\obj\Debug\net7.0\Backend.MvcApplicationPartsAssemblyInfo.cache
