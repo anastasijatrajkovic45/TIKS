@@ -1,4 +1,9 @@
 namespace WebTemplate.Controllers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Models;
+using System;
+using System.Threading.Tasks;
 
 [ApiController]
 [Route("[controller]")]
@@ -10,6 +15,7 @@ public class KorisnikContoller : ControllerBase
     {
         Context = context;
     }
+
     [HttpPost]
     [Route("DodajKorisnika")]
     public async Task<ActionResult> DodajKorisnika([FromBody]Korisnik korisnik)
@@ -22,19 +28,20 @@ public class KorisnikContoller : ControllerBase
         }
         catch
         {
-                return BadRequest("Nije uspelo dodavanje korisnik");
+                return BadRequest("Nije uspelo dodavanje korisnika!");
         }
     }
 
-     [HttpDelete("ObrisiKorisnika/{id}")]
+    [HttpDelete("ObrisiKorisnika/{id}")]
     public async Task<ActionResult> ObrisiKorisnika(int id)
     {
         var stari = await Context.Korisnici.FindAsync(id);
 
         if (stari != null)
         {
-            var ime=stari.Ime;
-            var prezime=stari.Prezime;
+            var ime = stari.Ime;
+            var prezime = stari.Prezime;
+            
             Context.Korisnici.Remove(stari);
             await Context.SaveChangesAsync();
             return Ok($"Izbrisan je korisnik: {ime} {prezime}");
@@ -66,9 +73,9 @@ public class KorisnikContoller : ControllerBase
         if (stari != null)
         {
             stari.Ime = korisnik.Ime;
-            stari.Prezime=korisnik.Prezime;
-            stari.Adresa=korisnik.Adresa;
-            stari.BrojTelefona=korisnik.BrojTelefona;
+            stari.Prezime = korisnik.Prezime;
+            stari.Adresa = korisnik.Adresa;
+            stari.BrojTelefona = korisnik.BrojTelefona;
 
             Context.Korisnici.Update(stari);
             await Context.SaveChangesAsync();
@@ -76,7 +83,7 @@ public class KorisnikContoller : ControllerBase
         }
         else
         {
-            return BadRequest("Neuspelo!");
+            return BadRequest("Nije uspelo azuriranje korisnika!");
         }
     }
 }

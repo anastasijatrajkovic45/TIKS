@@ -1,4 +1,9 @@
 namespace WebTemplate.Controllers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Models;
+using System;
+using System.Threading.Tasks;
 
 [ApiController]
 [Route("[controller]")]
@@ -23,7 +28,7 @@ public class PutovanjeController : ControllerBase
         }
         catch
         {
-                return BadRequest("Nije uspelo dodavanje putovanja");
+                return BadRequest("Nije uspelo dodavanje putovanja!");
         }
     }
 
@@ -34,14 +39,15 @@ public class PutovanjeController : ControllerBase
 
         if (stari != null)
         {
-            var naziv=stari.Destinacija;
+            var mesto = stari.Mesto;
+
             Context.Putovanja.Remove(stari);
             await Context.SaveChangesAsync();
-            return Ok($"Izbrisano je putovanje na destinaciji: {naziv}");
+            return Ok($"Izbrisano je putovanje na mestu: {mesto}");
         }
         else
         {
-            return BadRequest("Neuspelo!");
+            return BadRequest("Nije uspelo brisanje putovanja!");
         }
     }
 
@@ -65,8 +71,10 @@ public class PutovanjeController : ControllerBase
 
         if (stari != null)
         {
-            stari.DatumPolaska = putovanje.DatumPolaska;
-            stari.DatumPovratka=putovanje.DatumPovratka;
+            stari.Mesto = putovanje.Mesto;
+            stari.BrojNocenja = putovanje.BrojNocenja;
+            stari.Prevoz = putovanje.Prevoz;
+            stari.Cena = putovanje.Cena;
 
             Context.Putovanja.Update(stari);
             await Context.SaveChangesAsync();
@@ -74,9 +82,7 @@ public class PutovanjeController : ControllerBase
         }
         else
         {
-            return BadRequest("Neuspelo!");
+            return BadRequest("Nije uspeslo azuriranje putovanja!");
         }
     }
-
-   
 }

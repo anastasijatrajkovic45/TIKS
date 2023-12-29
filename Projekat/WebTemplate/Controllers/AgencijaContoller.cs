@@ -1,5 +1,9 @@
 namespace WebTemplate.Controllers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models;
+using System;
+using System.Threading.Tasks;
 
 [ApiController]
 [Route("[controller]")]
@@ -24,7 +28,7 @@ public class AgencijaContoller : ControllerBase
         }
         catch
         {
-            return BadRequest("Nije uspelo dodavanje agencije");
+            return BadRequest("Nije uspelo dodavanje agencije!");
         }
     }
 
@@ -35,14 +39,15 @@ public class AgencijaContoller : ControllerBase
 
         if (stari != null)
         {
-            var naziv=stari.Naziv;
+            var naziv = stari.Naziv;
+            
             Context.Agencije.Remove(stari);
             await Context.SaveChangesAsync();
             return Ok($"Izbrisana je agencija: {naziv}");
         }
         else
         {
-            return BadRequest("Neuspelo!");
+            return BadRequest("Nije uspelo brisanje agencije!");
         }
     }
 
@@ -67,6 +72,9 @@ public class AgencijaContoller : ControllerBase
         if (stari != null)
         {
             stari.Naziv = agencija.Naziv;
+            stari.Adresa = agencija.Adresa;
+            stari.BrojTelefona = agencija.BrojTelefona;
+            stari.Email = agencija.Email;
 
             Context.Agencije.Update(stari);
             await Context.SaveChangesAsync();
@@ -74,9 +82,7 @@ public class AgencijaContoller : ControllerBase
         }
         else
         {
-            return BadRequest("Neuspelo!");
+            return BadRequest("Nije uspelo azuriranje agencije!");
         }
     }
-
-
 }

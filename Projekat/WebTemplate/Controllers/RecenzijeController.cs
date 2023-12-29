@@ -1,4 +1,9 @@
 namespace WebTemplate.Controllers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Models;
+using System;
+using System.Threading.Tasks;
 
 [ApiController]
 [Route("[controller]")]
@@ -10,6 +15,7 @@ public class RecenzijaController : ControllerBase
     {
         Context = context;
     }
+
     [HttpPost]
     [Route("DodajRecenziju")]
     public async Task<ActionResult> DodajRecenziju([FromBody]Recenzija recenzija)
@@ -22,7 +28,7 @@ public class RecenzijaController : ControllerBase
         }
         catch
         {
-                return BadRequest("Nije uspelo dodavanje recenzije");
+                return BadRequest("Nije uspelo dodavanje recenzije!");
         }
     }
 
@@ -39,7 +45,7 @@ public class RecenzijaController : ControllerBase
         }
         else
         {
-            return BadRequest("Neuspelo!");
+            return BadRequest("Nije uspelo brisanje recenzije!");
         }
     }
 
@@ -71,7 +77,7 @@ public class RecenzijaController : ControllerBase
         }
         else
         {
-            return BadRequest("Neuspelo!");
+            return BadRequest("Nije uspelo azuriranje recenzije!");
         }
     }
 }
