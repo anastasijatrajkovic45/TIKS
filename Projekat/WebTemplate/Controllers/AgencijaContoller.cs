@@ -64,6 +64,20 @@ public class AgencijaContoller : ControllerBase
         }
     }
 
+    [HttpGet("PrezumiAgenciju/{id}")]
+    public async Task<ActionResult> PrezumiAgenciju(int id)
+    {
+        var agencija = await Context.Agencije.FindAsync(id);
+        try
+        {
+            return Ok(agencija);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
     [HttpPut("AzurirajAgenciju/{id}")]
     public async Task<ActionResult> AzurirajAgenciju(int id, [FromBody]Agencija agencija)
     {

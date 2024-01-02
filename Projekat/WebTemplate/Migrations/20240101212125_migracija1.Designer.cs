@@ -12,8 +12,8 @@ using Models;
 namespace WebTemplate.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20231227214157_veza1")]
-    partial class veza1
+    [Migration("20240101212125_migracija1")]
+    partial class migracija1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,36 @@ namespace WebTemplate.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("AktivnostPutovanje", b =>
+                {
+                    b.Property<int>("AktivnostiId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PutovanjeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AktivnostiId", "PutovanjeId");
+
+                    b.HasIndex("PutovanjeId");
+
+                    b.ToTable("AktivnostPutovanje");
+                });
+
+            modelBuilder.Entity("KorisnikRezervacija", b =>
+                {
+                    b.Property<int>("KorisnikId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RezervacijaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("KorisnikId", "RezervacijaId");
+
+                    b.HasIndex("RezervacijaId");
+
+                    b.ToTable("KorisnikRezervacija");
+                });
 
             modelBuilder.Entity("Models.Agencija", b =>
                 {
@@ -37,11 +67,15 @@ namespace WebTemplate.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("BrojaTelefona")
+                    b.Property<string>("BrojTelefona")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Grad")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -52,6 +86,26 @@ namespace WebTemplate.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Agencije");
+                });
+
+            modelBuilder.Entity("Models.Aktivnost", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Cena")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Naziv")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Aktivnosti");
                 });
 
             modelBuilder.Entity("Models.Korisnik", b =>
@@ -74,6 +128,10 @@ namespace WebTemplate.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Grad")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -103,19 +161,28 @@ namespace WebTemplate.Migrations
                     b.Property<int?>("AgencijaId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DatumPolaska")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("BrojNocenja")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("DatumPovratka")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Cena")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Destinacija")
+                    b.Property<string>("Mesto")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Prevoz")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RezervacijaId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AgencijaId");
+
+                    b.HasIndex("RezervacijaId");
 
                     b.ToTable("Putovanja");
                 });
@@ -145,6 +212,62 @@ namespace WebTemplate.Migrations
                     b.ToTable("Recenzije");
                 });
 
+            modelBuilder.Entity("Models.Rezervacija", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BrojOsoba")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DatumDo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DatumOd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Smestaj")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Rezervacije");
+                });
+
+            modelBuilder.Entity("AktivnostPutovanje", b =>
+                {
+                    b.HasOne("Models.Aktivnost", null)
+                        .WithMany()
+                        .HasForeignKey("AktivnostiId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Putovanje", null)
+                        .WithMany()
+                        .HasForeignKey("PutovanjeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("KorisnikRezervacija", b =>
+                {
+                    b.HasOne("Models.Korisnik", null)
+                        .WithMany()
+                        .HasForeignKey("KorisnikId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Rezervacija", null)
+                        .WithMany()
+                        .HasForeignKey("RezervacijaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Models.Korisnik", b =>
                 {
                     b.HasOne("Models.Agencija", "Agencija")
@@ -159,6 +282,10 @@ namespace WebTemplate.Migrations
                     b.HasOne("Models.Agencija", "Agencija")
                         .WithMany("Putovanje")
                         .HasForeignKey("AgencijaId");
+
+                    b.HasOne("Models.Rezervacija", null)
+                        .WithMany("Putovanje")
+                        .HasForeignKey("RezervacijaId");
 
                     b.Navigation("Agencija");
                 });
@@ -182,6 +309,11 @@ namespace WebTemplate.Migrations
             modelBuilder.Entity("Models.Korisnik", b =>
                 {
                     b.Navigation("Recenzija");
+                });
+
+            modelBuilder.Entity("Models.Rezervacija", b =>
+                {
+                    b.Navigation("Putovanje");
                 });
 #pragma warning restore 612, 618
         }

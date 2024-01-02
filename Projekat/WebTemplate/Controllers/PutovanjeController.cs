@@ -31,6 +31,24 @@ public class PutovanjeController : ControllerBase
                 return BadRequest("Nije uspelo dodavanje putovanja!");
         }
     }
+    [HttpPost]
+    [Route("DodajPutovanjeAgenciji/{id}")]
+    public async Task<ActionResult> DodajPutovanjeAgenciji([FromBody] Putovanje putovanje, int id)
+    {
+        var agencija = await Context.Agencije.FindAsync(id);
+        try
+        {
+            putovanje.Agencija=agencija;
+            agencija.Putovanje.Add(putovanje);
+            await Context.Putovanja.AddAsync(putovanje);
+            await Context.SaveChangesAsync();
+            return Ok($"ID novog putovanja je = {putovanje.Id}");
+        }
+        catch
+        {
+            return BadRequest("Nije uspelo dodavanje putovanja!");
+        }
+    }
 
     [HttpDelete("ObrisiPutovanje/{id}")]
     public async Task<ActionResult> ObrisiPutovanje(int id)

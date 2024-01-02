@@ -7,6 +7,7 @@ public class Korisnik
     public required string Prezime { get; set; }
     public required string BrojTelefona { get; set; }
     public required string Adresa { get; set; }
+    public required string Grad { get; set; }
     public required string Email { get; set; }
 
     public Agencija? Agencija { get; set; }
