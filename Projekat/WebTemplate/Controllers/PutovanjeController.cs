@@ -38,7 +38,7 @@ public class PutovanjeController : ControllerBase
         var agencija = await Context.Agencije.FindAsync(id);
         try
         {
-            putovanje.Agencija=agencija;
+            putovanje.Agencija = agencija;
             agencija.Putovanje.Add(putovanje);
             await Context.Putovanja.AddAsync(putovanje);
             await Context.SaveChangesAsync();
@@ -89,6 +89,7 @@ public class PutovanjeController : ControllerBase
 
         if (stari != null)
         {
+            stari.Slika = putovanje.Slika;
             stari.Mesto = putovanje.Mesto;
             stari.BrojNocenja = putovanje.BrojNocenja;
             stari.Prevoz = putovanje.Prevoz;

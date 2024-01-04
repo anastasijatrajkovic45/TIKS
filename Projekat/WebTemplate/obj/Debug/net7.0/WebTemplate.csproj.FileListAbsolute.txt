@@ -161,3 +161,8 @@ C:\Users\PC\Documents\IV godina\VII\TIKS\Aplikacija\Projekat\WebTemplate\obj\Deb
 C:\Users\PC\Documents\IV godina\VII\TIKS\Aplikacija\Projekat\WebTemplate\obj\Debug\net7.0\WebTemplate.pdb
 C:\Users\PC\Documents\IV godina\VII\TIKS\Aplikacija\Projekat\WebTemplate\obj\Debug\net7.0\WebTemplate.genruntimeconfig.cache
 C:\Users\PC\Documents\IV godina\VII\TIKS\Aplikacija\Projekat\WebTemplate\obj\Debug\net7.0\ref\WebTemplate.dll
+C:\Users\PC\Documents\IV godina\VII\TIKS\Aplikacija\Projekat\WebTemplate\bin\Debug\net7.0\Google.Apis.dll
+C:\Users\PC\Documents\IV godina\VII\TIKS\Aplikacija\Projekat\WebTemplate\bin\Debug\net7.0\Google.Apis.Auth.PlatformServices.dll
+C:\Users\PC\Documents\IV godina\VII\TIKS\Aplikacija\Projekat\WebTemplate\bin\Debug\net7.0\Google.Apis.Auth.dll
+C:\Users\PC\Documents\IV godina\VII\TIKS\Aplikacija\Projekat\WebTemplate\bin\Debug\net7.0\Google.Apis.Core.dll
+C:\Users\PC\Documents\IV godina\VII\TIKS\Aplikacija\Projekat\WebTemplate\bin\Debug\net7.0\Newtonsoft.Json.dll

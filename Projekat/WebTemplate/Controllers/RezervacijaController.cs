@@ -32,6 +32,46 @@ public class RezervacijaController : ControllerBase
         }
     }
 
+    [HttpPost("DodajRezervacijuPutovanja/{id}")]
+    public async Task<ActionResult> DodajRezervacijuPutovanja(int id, Rezervacija rezervacija)
+    {
+        var putovanje = await Context.Putovanja
+            .Include(a => a.Rezervacije)
+            .FirstOrDefaultAsync(a => a.Id == id);
+
+        if (putovanje == null)
+        {
+            return NotFound("Putovanje nije pronađena");
+        }
+        putovanje.Rezervacije!.Add(rezervacija);
+        
+        try
+        {
+            await Context.SaveChangesAsync();
+            return Ok("Rezervacija za putovanje je uspesno dodata.");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Greška prilikom dodavanja rezervacije putovanja: {ex.Message}");
+        }
+    }
+
+    [HttpGet("PreuzmiRezervacijePutovanja/{id}")]
+    public async Task<ActionResult> PreuzmiRezervacijePutovanja(int id)
+    {
+        var putovanje = await Context.Putovanja
+            .Include(a => a.Rezervacije) 
+            .FirstOrDefaultAsync(a => a.Id == id);
+
+        if (putovanje == null)
+        {
+            return NotFound("Putovanje nije pronađeno");
+        }
+
+        var rezervacija = putovanje!.Rezervacije!.ToList();
+        return Ok(rezervacija);
+    }
+
     [HttpGet("PreuzmiRezervacije")]
     public async Task<ActionResult> PreuzmiRezervacije()
     {
@@ -52,11 +92,12 @@ public class RezervacijaController : ControllerBase
 
         if (stari != null)
         {
-            var smestaj = stari.Smestaj;
+            var ime = stari.Ime;
+            var prezime = stari.Prezime;
 
             Context.Rezervacije.Remove(stari);
             await Context.SaveChangesAsync();
-            return Ok($"Izbrisana je rezervacija: {smestaj}");
+            return Ok($"Izbrisana je rezervacija korisnika: {ime} {prezime}");
         }
         else
         {
@@ -71,9 +112,11 @@ public class RezervacijaController : ControllerBase
 
         if (stari != null)
         {
-            stari.Smestaj = rezervacija.Smestaj;
-            stari.DatumOd = rezervacija.DatumOd;
-            stari.DatumDo = rezervacija.DatumDo;
+            stari.Ime = rezervacija.Ime;
+            stari.Prezime = rezervacija.Prezime;
+            stari.Adresa = rezervacija.Adresa;
+            stari.Grad = rezervacija.Grad;
+            stari.Email = rezervacija.Email;
             stari.BrojOsoba = rezervacija.BrojOsoba;
 
             Context.Rezervacije.Update(stari);
