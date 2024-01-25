@@ -9,6 +9,6 @@ public class Agencija
     public required string Grad { get; set; }
     public required string Email { get; set; }
     public required string BrojTelefona { get; set; }
-    
+    [JsonIgnore]
     public List<Putovanje>? Putovanje { get; set; }
 }

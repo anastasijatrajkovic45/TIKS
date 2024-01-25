@@ -12,12 +12,14 @@ namespace WebTemplate.NUnitTestovi
     [TestFixture]
     public class AgencijaTests
     {
+        private Context _context;
         [SetUp]
         public void Setup()
         {
-            Console.WriteLine("Setup");
+            
         }
-
+    
+       
         [Test]
         public async Task DodajAgenciju_ValidAgencija_ReturnsOkResult()
         {
