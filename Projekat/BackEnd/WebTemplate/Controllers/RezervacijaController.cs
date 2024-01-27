@@ -116,6 +116,7 @@ public class RezervacijaController : ControllerBase
             stari.Prezime = rezervacija.Prezime;
             stari.Adresa = rezervacija.Adresa;
             stari.Grad = rezervacija.Grad;
+            stari.BrojTelefona = rezervacija.BrojTelefona;
             stari.Email = rezervacija.Email;
             stari.BrojOsoba = rezervacija.BrojOsoba;
 

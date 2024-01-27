@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, CardContent, Typography, CircularProgress, Grid, Divider, Button, Dialog, DialogTitle, DialogContent, TextField } from '@mui/material';
 import { Box } from '@mui/system';
-import StarRatings from 'react-star-ratings';
+//import StarRatings from 'react-star-ratings';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -122,6 +122,7 @@ const Recenzije = () => {
       <Typography variant="h6" gutterBottom style={{ fontFamily: 'sans-serif' }}>
         <Divider variant="h4">Recenzije putovanja</Divider>
         <Button
+        id="dodajRecenziju"
         variant="contained"
         sx={{backgroundColor: '#900C3F'}}
         style={{
@@ -138,7 +139,7 @@ const Recenzije = () => {
       {loading ? (
         <CircularProgress style={{ marginTop: '20px' }} />
       ) : (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Box id="recenzije" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {recenzije.map((recenzija) => (
             <Box
               key={recenzija.id}
@@ -154,6 +155,7 @@ const Recenzije = () => {
                 {recenzija.korisnik}
                 <span style={{ marginLeft: '10px' }}>
                       <EditIcon
+                        id="izmeniRecenziju"
                         color="success"
                         sx={{ cursor: 'pointer', marginRight: '10px' }}
                         onClick={() => handleIzmeniRecenziju(recenzija.id)}
@@ -161,6 +163,7 @@ const Recenzije = () => {
                         onMouseOut={(e) => e.target.style.opacity = 1}
                       />
                       <DeleteIcon
+                        id="obrisiRecenziju"
                         color="error"
                         sx={{ cursor: 'pointer' }}
                         onClick={() => handleObrisiRecenziju(recenzija.id)}
@@ -173,15 +176,15 @@ const Recenzije = () => {
                 Komentar: {recenzija.komentar}
               </Typography>
               <Typography variant="body1" color="textSecondary">
-                Ocena:{' '}
-                <StarRatings
+                Ocena:{recenzija.ocena}
+                {/* <StarRatings
                       rating={recenzija.ocena}
                       starRatedColor="gold"
                       numberOfStars={5}
                       name="ocena"
                       starDimension="20px"
                       starSpacing="2px"
-                />
+                /> */}
               </Typography>
             </Box>
           ))}
@@ -213,9 +216,20 @@ const Recenzije = () => {
             value={novaRecenzija.komentar}
             onChange={handleChange}
           />
-          <Box>
+          <TextField
+            margin="dense"
+            id="ocena"
+            name="ocena"
+            label="Ocena"
+            type="text"
+            fullWidth
+            value={novaRecenzija.ocena}
+            onChange={handleChange}
+          />
+          {/* <Box>
             <Typography component="legend">Ocena</Typography>
             <StarRatings
+              id="ocena"
               rating={novaRecenzija.ocena}
               starRatedColor="gold"
               changeRating={(newRating) => handleChange({ target: { name: 'ocena', value: newRating } })}
@@ -224,8 +238,8 @@ const Recenzije = () => {
               starDimension="30px"
               starSpacing="2px"
             />
-          </Box>
-          <Button variant="contained" sx={{backgroundColor: '#900C3F'}} onClick={handleSubmit}>
+          </Box> */}
+          <Button id="sacuvaj" variant="contained" sx={{backgroundColor: '#900C3F'}} onClick={handleSubmit}>
             Sačuvaj
           </Button>
         </DialogContent>
@@ -236,7 +250,7 @@ const Recenzije = () => {
           <TextField
             autoFocus
             margin="dense"
-            id="korisnik"
+            id="korisnikIzmeni"
             name="korisnik"
             label="Korisnik"
             type="text"
@@ -246,7 +260,7 @@ const Recenzije = () => {
           />
           <TextField
             margin="dense"
-            id="komentar"
+            id="komentarIzmeni"
             name="komentar"
             label="Komentar"
             type="text"
@@ -254,9 +268,20 @@ const Recenzije = () => {
             value={izmenjeniPodaci.komentar}
             onChange={handleIzmenaChange}
           />
-          <Box>
+          <TextField
+            margin="dense"
+            id="ocenaIzmeni"
+            name="ocena"
+            label="Ocena"
+            type="text"
+            fullWidth
+            value={izmenjeniPodaci.ocena}
+            onChange={handleIzmenaChange}
+          />
+          {/* <Box>
             <Typography component="legend">Ocena</Typography>
             <StarRatings
+              id="ocenaIzmeni"
               rating={izmenjeniPodaci.ocena}
               starRatedColor="gold"
               changeRating={(newRating) => handleIzmenaChange({ target: { name: 'ocena', value: newRating } })}
@@ -265,8 +290,8 @@ const Recenzije = () => {
               starDimension="30px"
               starSpacing="2px"
             />
-          </Box>
-          <Button variant="contained" sx={{backgroundColor: '#900C3F'}} onClick={handleSacuvajIzmenu}>
+          </Box> */}
+          <Button id="sacuvajIzmene" variant="contained" sx={{backgroundColor: '#900C3F'}} onClick={handleSacuvajIzmenu}>
             Sačuvaj izmene
           </Button>
         </DialogContent>

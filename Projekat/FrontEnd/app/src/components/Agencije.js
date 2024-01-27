@@ -1,182 +1,105 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, Typography, Grid, Divider, Link, Button, TextField, DialogActions, DialogTitle, Dialog, DialogContent } from '@mui/material';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-import Putovanje from './Putovanje';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  Grid,
+  Divider,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+} from '@mui/material';
+import { NavLink } from 'react-router-dom';
 
 const Agencije = () => {
-  const { id } = useParams();
   const [agencije, setAgencije] = useState([]);
-  const [open, setOpen] = useState(false); 
-  const [noviNaziv, setNoviNaziv] = useState('');
-  const [novaAdresa, setNovaAdresa] = useState('');
-  const [noviGrad, setNoviGrad] = useState('');
-  const [noviEmail, setNoviEmail] = useState('');
-  const [noviBrojTelefona, setNoviBrojTelefona] = useState('');
-  const [trenutnaAgencija, setTrenutnaAgencija] = useState(null);
-  const [dialogMode, setDialogMode] = useState(''); 
-  const navigate = useNavigate();
+  const [openDodajForma, setOpenDodajForma] = useState(false);
+  const [openIzmeniForma, setOpenIzmeniForma] = useState(false);
+  const [novaAgencija, setNovaAgencija] = useState({});
+  const [selectedAgencijaId, setSelectedAgencijaId] = useState(null);
 
   useEffect(() => {
-    fetch('https://localhost:7193/AgencijaContoller/PrezumiAgencije')
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchAgencije = async () => {
+      try {
+        const response = await fetch('https://localhost:7193/AgencijaContoller/PrezumiAgencije');
+        const data = await response.json();
         setAgencije(data);
-      })
-      .catch((error) => {
-        console.error('Greška prilikom preuzimanja agencija:', error);
-      });
+      } catch (error) {
+        console.error('Error fetching agencije:', error);
+      }
+    };
+
+    fetchAgencije();
   }, []);
 
-  const handleDodajAgenciju = () => {
-    setDialogMode('Dodaj');
-    setOpen(true);
-  };
-
-  const handleIzmeniAgenciju = (agencija) => {
-    setTrenutnaAgencija(agencija);
-    setNoviNaziv(agencija.naziv);
-    setNovaAdresa(agencija.adresa);
-    setNoviGrad(agencija.grad);
-    setNoviEmail(agencija.email);
-    setNoviBrojTelefona(agencija.brojTelefona);
-    setDialogMode('Izmeni');
-    setOpen(true);
-  };
-  
-
-  const handleClose = () => {
-    setOpen(false);
-    setDialogMode('');
-   
-  };
-
-const fetchData = () => {
-  fetch('https://localhost:7193/AgencijaContoller/PrezumiAgencije')
-    .then((response) => response.json())
-    .then((data) => {
-      setAgencije(data);
-    })
-    .catch((error) => {
-      console.error('Greška prilikom preuzimanja agencija:', error);
-    });
-};
-
-  const handleDialogAction = () => {
-    if (dialogMode === 'Dodaj') {
-      handleDodaj();
-    } else if (dialogMode === 'Izmeni') {
-      handleIzmeni();
+  const handleObrisiAgenciju = async (id) => {
+    try {
+      await fetch(`https://localhost:7193/AgencijaContoller/ObrisiAgenciju/${id}`, {
+        method: 'DELETE',
+      });
+      window.location.reload();
+    } catch (error) {
+      console.error('Error deleting agencija:', error);
     }
   };
 
-  const [deletedAgencija, setDeletedAgencija] = useState(null);
-
-  const handleObrisiAgenciju = (id) => {
-    fetch(`https://localhost:7193/AgencijaContoller/ObrisiAgenciju/${id}`, {
-      method: 'DELETE',
-    })
-      .then((response) => {
-        if (response.ok) {
-          const deleted = agencije.find((agencija) => agencija.id === id);
-          setDeletedAgencija(deleted); 
-          setOpen(true); 
-          setAgencije(agencije.filter((agencija) => agencija.id !== id));
-        } else {
-          throw new Error('Neuspelo brisanje agencije');
-        }
-      })
-      .catch((error) => {
-        console.error('Greška prilikom brisanja agencije:', error);
-      });
-  };
-
-  const handleDodaj = () => {
-    if (noviNaziv && novaAdresa && noviGrad && noviEmail && noviBrojTelefona) {
-      fetch('https://localhost:7193/AgencijaContoller/DodajAgenciju', {
+  const handleDodajAgenciju = async () => {
+    try {
+      await fetch('https://localhost:7193/AgencijaContoller/DodajAgenciju', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          Naziv: noviNaziv,
-          Adresa: novaAdresa,
-          Grad: noviGrad,
-          Email: noviEmail,
-          BrojTelefona: noviBrojTelefona,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          handleClose();
-          fetchData(); 
-        })
-        .catch((error) => {
-          console.error('Greška prilikom dodavanja agencije:', error);
-        });
-    } else {
-      console.error('Molimo Vas da unesete sve podatke.');
+        body: JSON.stringify(novaAgencija),
+      });
+      window.location.reload();
+    } catch (error) {
+      console.error('Error adding agencija:', error);
     }
   };
-  
-  const handleIzmeni = () => {
-    if (
-      trenutnaAgencija &&
-      noviNaziv &&
-      novaAdresa &&
-      noviGrad &&
-      noviEmail &&
-      noviBrojTelefona
-    ) {
-      fetch(`https://localhost:7193/AgencijaContoller/AzurirajAgenciju/${trenutnaAgencija.id}`, {
+
+  const handleIzmeniAgenciju = async () => {
+    try {
+      await fetch(`https://localhost:7193/AgencijaContoller/AzurirajAgenciju/${selectedAgencijaId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          Naziv: noviNaziv,
-          Adresa: novaAdresa,
-          Grad: noviGrad,
-          Email: noviEmail,
-          BrojTelefona: noviBrojTelefona,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          handleClose();
-          fetchData(); 
-        })
-        .catch((error) => {
-          console.error('Greška prilikom izmene agencije:', error);
-        });
-    } else {
-      console.error('Molimo Vas da unesete sve podatke.');
+        body: JSON.stringify(novaAgencija),
+      });
+      window.location.reload();
+    } catch (error) {
+      console.error('Error updating agencija:', error);
     }
+  };
+
+  const openIzmeniFormaHandler = (agencija) => {
+    setSelectedAgencijaId(agencija.id);
+    setNovaAgencija(agencija);
+    setOpenIzmeniForma(true);
   };
 
   return (
     <div>
-      <Typography variant="h6" sx={{ marginTop: '25px' }} gutterBottom>
+      <Typography variant="h6" sx={{ marginTop: '10px' }} gutterBottom>
         <Divider>Lista agencija</Divider>
         <Button
           variant="contained"
-          style={{margin: '0 auto', display: 'block', marginTop: '20px', }} 
-          onClick={handleDodajAgenciju}
-          sx={{ marginTop: '20px', backgroundColor: '#900C3F' }}>
+          style={{ margin: '0 auto', display: 'block', marginTop: '10px' }}
+          onClick={() => setOpenDodajForma(true)}
+          sx={{ marginTop: '10px', backgroundColor: '#900C3F' }}
+        >
           Dodaj agenciju
         </Button>
       </Typography>
       <Grid container spacing={2}>
-         <Routes>
-        {agencije.map((agencija) => (
-          <Route key={agencija.id} path={`/Agencije/${agencija.id}`} element={<Putovanje />} />
-        ))}
-      </Routes>
         {agencije.map((agencija) => (
           <Grid item xs={12} sm={6} md={4} key={agencija.id}>
-            <Card variant="outlined" sx={{ borderColor: 'purple'}} >
-              <CardContent sx={{ paddingTop: '25px' }}>
+            <Card variant="outlined" sx={{ borderColor: 'purple', minWidth: '250px', margin: '1px' }}>
+              <CardContent sx={{ paddingTop: '5px' }}>
                 <Typography variant="h6">{agencija.naziv}</Typography>
                 <Typography variant="body6" color="textSecondary">
                   Lokacija: {agencija.adresa}, {agencija.grad}
@@ -187,139 +110,149 @@ const fetchData = () => {
                 <Typography variant="body2" color="textSecondary">
                   Broj telefona: {agencija.brojTelefona}
                 </Typography>
-                   
-                <NavLink to={`/Agencije/${agencija.id}`}>
-                  <Divider>
+                <Divider>
+                  <NavLink to={`/Agencije/${agencija.id}`}>
                     <Button
-                      sx={{color: '#900C3F',transition: 'box-shadow 0.3s, color 0.3s',
-                      '&:hover': {
-                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                      sx={{
                         color: '#900C3F',
-                      },}}
-                      >Pregled putovanja
+                        transition: 'box-shadow 0.3s, color 0.3s',
+                        '&:hover': {
+                          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                          color: '#900C3F',
+                        },
+                      }}
+                    >
+                      Pregled putovanja
                     </Button>
-                  </Divider>
-                </NavLink>
-                  <Divider>
-                    <Button
-                      sx={{color: '#304D30',transition: 'box-shadow 0.3s, color 0.3s',
-                      '&:hover': {
-                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                        color: '#304D30',
-                      },}}
-                      onClick={() => handleIzmeniAgenciju(agencija)}
-                    >Izmeni
-                    </Button>
-                  </Divider>
-                  <Divider>
-                    <Button 
-                      sx={{color: '#B80000',transition: 'box-shadow 0.3s, color 0.3s',
-                      '&:hover': {
-                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                        color: '#B80000',
-                      },}}
-                      onClick={() => handleObrisiAgenciju(agencija.id)}
-                    >Obriši
-                    </Button>
-                  </Divider>
-                
+                  </NavLink>
+                </Divider>
+                <Divider>
+                  <Button sx={{ color: '#B80010' }}  onClick={() => handleObrisiAgenciju(agencija.id)}>
+                    Obriši
+                  </Button>
+                </Divider>
+                <Divider>
+                <Button
+                  sx={{
+                    color: '#B80000',
+                    transition: 'box-shadow 0.3s, color 0.3s',
+                    '&:hover': {
+                      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                      color: '#B80000',
+                    },
+                  }}
+                  onClick={() => openIzmeniFormaHandler(agencija)}
+                >
+                  Izmeni
+                </Button>
+                </Divider>
               </CardContent>
             </Card>
           </Grid>
         ))}
       </Grid>
-      {trenutnaAgencija && (
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>{dialogMode === 'Dodaj' ? 'Dodaj agenciju' : 'Izmeni agenciju'}</DialogTitle>
-          <DialogContent>
-            <TextField
-              label="Naziv"
-              value={noviNaziv || trenutnaAgencija.naziv}
-              onChange={(e) => setNoviNaziv(e.target.value)}
-              fullWidth
-              margin="normal"
-            />
-            <TextField
-              label="Adresa"
-              value={novaAdresa || trenutnaAgencija.adresa}
-              onChange={(e) => setNovaAdresa(e.target.value)}
-              fullWidth
-              margin="normal"
-            />
-            <TextField
-              label="Grad"
-              value={noviGrad || trenutnaAgencija.grad}
-              onChange={(e) => setNoviGrad(e.target.value)}
-              fullWidth
-              margin="normal"
-            />
-            <TextField
-              label="Email"
-              value={noviEmail || trenutnaAgencija.email}
-              onChange={(e) => setNoviEmail(e.target.value)}
-              fullWidth
-              margin="normal"
-            />
-            <TextField
-              label="Broj Telefona"
-              value={noviBrojTelefona || trenutnaAgencija.brojTelefona}
-              onChange={(e) => setNoviBrojTelefona(e.target.value)}
-              fullWidth
-              margin="normal"
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Odustani</Button>
-            <Button onClick={handleDialogAction} variant="contained" color="primary">
-              {dialogMode === 'Dodaj' ? 'Dodaj agenciju' : 'Sačuvaj izmene'}
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
-      
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Dodaj Agenciju</DialogTitle>
+
+      {/* dodavanje agencije */}
+      <Dialog open={openDodajForma} onClose={() => setOpenDodajForma(false)}>
+        <DialogTitle>Dodaj agenciju</DialogTitle>
         <DialogContent>
           <TextField
             label="Naziv"
-            value={noviNaziv}
-            onChange={(e) => setNoviNaziv(e.target.value)}
-            fullWidth
+            variant="outlined"
             margin="normal"
+            fullWidth
+            onChange={(e) => setNovaAgencija({ ...novaAgencija, naziv: e.target.value })}
           />
           <TextField
             label="Adresa"
-            value={novaAdresa}
-            onChange={(e) => setNovaAdresa(e.target.value)}
-            fullWidth
+            variant="outlined"
             margin="normal"
+            fullWidth
+            onChange={(e) => setNovaAgencija({ ...novaAgencija, adresa: e.target.value })}
           />
           <TextField
             label="Grad"
-            value={noviGrad}
-            onChange={(e) => setNoviGrad(e.target.value)}
-            fullWidth
+            variant="outlined"
             margin="normal"
+            fullWidth
+            onChange={(e) => setNovaAgencija({ ...novaAgencija, grad: e.target.value })}
+          />
+          <TextField
+            label="Broj telefona"
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            onChange={(e) => setNovaAgencija({ ...novaAgencija, brojTelefona: e.target.value })}
           />
           <TextField
             label="Email"
-            value={noviEmail}
-            onChange={(e) => setNoviEmail(e.target.value)}
-            fullWidth
+            variant="outlined"
             margin="normal"
-          />
-          <TextField
-            label="Broj Telefona"
-            value={noviBrojTelefona}
-            onChange={(e) => setNoviBrojTelefona(e.target.value)}
             fullWidth
-            margin="normal"
+            onChange={(e) => setNovaAgencija({ ...novaAgencija, email: e.target.value })}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} sx={{color: '#304D30'}}>Odustani</Button>
-          <Button onClick={handleDodaj} variant="contained" sx={{backgroundColor: '#900C3F'}}>
-            Dodaj agenciju
+          <Button onClick={() => setOpenDodajForma(false)} color="secondary">
+            Odustani
+          </Button>
+          <Button onClick={handleDodajAgenciju} color="primary">
+            Sačuvaj
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* izmeni agenciju */}
+      <Dialog open={openIzmeniForma} onClose={() => setOpenIzmeniForma(false)}>
+        <DialogTitle>Izmeni agenciju</DialogTitle>
+        <DialogContent>
+          <TextField
+            label="Naziv"
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            value={novaAgencija.naziv || ''}
+            onChange={(e) => setNovaAgencija({ ...novaAgencija, naziv: e.target.value })}
+          />
+          <TextField
+            label="Adresa"
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            value={novaAgencija.adresa || ''}
+            onChange={(e) => setNovaAgencija({ ...novaAgencija, adresa: e.target.value })}
+          />
+          <TextField
+            label="Grad"
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            value={novaAgencija.grad || ''}
+            onChange={(e) => setNovaAgencija({ ...novaAgencija, grad: e.target.value })}
+          />
+          <TextField
+            label="Broj telefona"
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            value={novaAgencija.brojTelefona || ''}
+            onChange={(e) => setNovaAgencija({ ...novaAgencija, brojTelefona: e.target.value })}
+          />
+          <TextField
+            label="Email"
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            value={novaAgencija.email || ''}
+            onChange={(e) => setNovaAgencija({ ...novaAgencija, email: e.target.value })}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenIzmeniForma(false)} color="secondary">
+            Odustani
+          </Button>
+          <Button onClick={handleIzmeniAgenciju} color="primary">
+            Sačuvaj
           </Button>
         </DialogActions>
       </Dialog>

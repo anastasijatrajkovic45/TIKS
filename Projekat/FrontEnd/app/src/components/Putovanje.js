@@ -171,7 +171,7 @@ const handleSacuvajIzmene = async (e) => {
   const handleIzmeniPutovanje = (putovanjeId) => {
     const izabranoPutovanje = putovanja.find((putovanje) => putovanje.id === putovanjeId);
     setPutovanjeZaIzmenu(izabranoPutovanje);
-    setIzmenjeniPodaci(izabranoPutovanje); // Postavljanje podataka za uređivanje
+    setIzmenjeniPodaci(izabranoPutovanje);
     setIzmenaPodataka(true);
   };
   
@@ -196,68 +196,6 @@ const handleSacuvajIzmene = async (e) => {
 
   return (
     <div style={{ textAlign: 'center', fontFamily: 'Roboto, sans-serif' }}>
-      <Typography variant="h6" gutterBottom style={{ fontFamily: 'sans-serif' }}>
-        <Divider style={{ marginTop: '30px' }}>Lista putovanja</Divider>
-      </Typography>
-      <Grid container spacing={3}>
-            {putovanja.map((putovanje) => (
-                <Grid item key={putovanje.id} xs={12} sm={6} md={4}>
-                    <StyledCard>
-                        <StyledCardImage src={putovanje.slika} alt={putovanje.mesto}/>
-                        <StyledCardContent>
-                        <Typography variant="h6" component="div" sx={{ display: 'flex', justifyContent: 'space-between', paddingRight: '16px' }}>
-                            {putovanje.mesto}
-                            <NavLink to={`/Putovanje/${putovanje.id}/Recenzije`}>
-                              <Button variant="outlined" color="secondary">
-                                Recenzije
-                              </Button>
-                            </NavLink>
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary" component="p">
-                                Broj Nocenja: {putovanje.brojNocenja}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary" component="p">
-                                Prevoz: {putovanje.prevoz}
-                            </Typography>
-                            <Typography variant="body2" color="textSecondary" component="p">
-                                Cena: {putovanje.cena}
-                            </Typography>
-                            <Divider style={{ margin: '10px 0' }} />
-                            <NavLink to={`/Putovanje/${putovanje.id}`}>
-                              <Button variant="contained" sx={{ backgroundColor: '#900C3F'}}>
-                                Pogledaj ponudu
-                              </Button>
-                            </NavLink>
-                            <Divider style={{ margin: '10px 0' }} />
-                            <Button
-                              variant="outlined"
-                              color="error"
-                              onClick={() => handleObrisiPutovanje(putovanje.id)}
-                            >
-                              Obriši
-                            </Button>
-                            <Button
-                              variant="outlined"
-                              color="success"
-                              onClick={() => handleIzmeniPutovanje(putovanje.id)}
-                              style={{ marginLeft: '10px' }}
-                            >
-                              Izmeni
-                            </Button>
-                            <Button
-                              variant="outlined"
-                              color="primary"
-                              onClick={() => handleRezervacijaPutovanja(putovanje.id)}
-                              style={{ marginLeft: '10px' }}
-                            >
-                              Rezerviši
-                            </Button>
-                        </StyledCardContent>
-                    </StyledCard>
-                </Grid>
-            ))}
-        </Grid>
-
       {putovanjeZaIzmenu && izmenaPodataka && (
       <div style={{ textAlign: 'center', marginTop: '20px' }}>
         <Typography variant="h6">Izmeni putovanje</Typography>
@@ -335,6 +273,7 @@ const handleSacuvajIzmene = async (e) => {
           style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
         >
           <TextField
+            id="ime"
             label="Ime"
             variant="outlined"
             value={podaciRezervacije.Ime}
@@ -344,6 +283,7 @@ const handleSacuvajIzmene = async (e) => {
             style={{ marginBottom: '10px', width: '300px' }}
           />
           <TextField
+            id="prezime"
             label="Prezime"
             variant="outlined"
             value={podaciRezervacije.Prezime}
@@ -353,6 +293,7 @@ const handleSacuvajIzmene = async (e) => {
             style={{ marginBottom: '10px', width: '300px' }}
           />
           <TextField
+            id="adresa"
             label="Adresa"
             variant="outlined"
             value={podaciRezervacije.Adresa}
@@ -362,6 +303,7 @@ const handleSacuvajIzmene = async (e) => {
             style={{ marginBottom: '10px', width: '300px' }}
           />
           <TextField
+            id="grad"
             label="Grad"
             variant="outlined"
             value={podaciRezervacije.Grad}
@@ -371,6 +313,7 @@ const handleSacuvajIzmene = async (e) => {
             style={{ marginBottom: '10px', width: '300px' }}
           />
           <TextField
+            id="brojTelefona"
             label="Broj telefona"
             variant="outlined"
             value={podaciRezervacije.BrojTelefona}
@@ -380,6 +323,7 @@ const handleSacuvajIzmene = async (e) => {
             style={{ marginBottom: '10px', width: '300px' }}
           />
           <TextField
+            id="email"
             label="Email"
             variant="outlined"
             value={podaciRezervacije.Email}
@@ -389,6 +333,7 @@ const handleSacuvajIzmene = async (e) => {
             style={{ marginBottom: '10px', width: '300px' }}
           />
           <TextField
+            id="brojOsoba"
             label="Broj osoba"
             variant="outlined"
             value={podaciRezervacije.BrojOsoba}
@@ -398,14 +343,13 @@ const handleSacuvajIzmene = async (e) => {
             style={{ marginBottom: '10px', width: '300px' }}
           />
 
-          <Button type="submit" variant="contained" sx={{ backgroundColor: '#900C3F'}}>
+          <Button id="potvrdiRezervaciju" type="submit" variant="contained" sx={{ backgroundColor: '#900C3F'}}>
             Potvrdi rezervaciju
           </Button>
         </form>
       </div>
     )}
-
-    {dodavanjeAktivno && (
+     {dodavanjeAktivno && (
       <div style={{ textAlign: 'center', marginTop: '20px' }}>
         <Typography variant="h6">Dodaj putovanje</Typography>
         <form
@@ -466,7 +410,68 @@ const handleSacuvajIzmene = async (e) => {
         </form>
       </div>
     )}
-
+      <Typography variant="h6" gutterBottom style={{ fontFamily: 'sans-serif' }}>
+        <Divider style={{ marginTop: '30px' }}>Lista putovanja</Divider>
+      </Typography>
+      <Grid container spacing={3}>
+            {putovanja.map((putovanje) => (
+                <Grid item key={putovanje.id} xs={12} sm={6} md={4}>
+                    <StyledCard>
+                        <StyledCardImage src={putovanje.slika} alt={putovanje.mesto}/>
+                        <StyledCardContent>
+                        <Typography variant="h6" component="div" sx={{ display: 'flex', justifyContent: 'space-between', paddingRight: '16px' }}>
+                            {putovanje.mesto}
+                            <NavLink to={`/Putovanje/${putovanje.id}/Recenzije`}>
+                              <Button variant="outlined" color="secondary">
+                                Recenzije
+                              </Button>
+                            </NavLink>
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary" component="p">
+                                Broj Nocenja: {putovanje.brojNocenja}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary" component="p">
+                                Prevoz: {putovanje.prevoz}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary" component="p">
+                                Cena: {putovanje.cena}
+                            </Typography>
+                            <Divider style={{ margin: '10px 0' }} />
+                            <NavLink to={`/Putovanje/${putovanje.id}`}>
+                              <Button variant="contained" sx={{ backgroundColor: '#900C3F'}}>
+                                Pogledaj ponudu
+                              </Button>
+                            </NavLink>
+                            <Divider style={{ margin: '10px 0' }} />
+                            <Button
+                              variant="outlined"
+                              color="error"
+                              onClick={() => handleObrisiPutovanje(putovanje.id)}
+                            >
+                              Obriši
+                            </Button>
+                            <Button
+                              variant="outlined"
+                              color="success"
+                              onClick={() => handleIzmeniPutovanje(putovanje.id)}
+                              style={{ marginLeft: '10px' }}
+                            >
+                              Izmeni
+                            </Button>
+                            <Button
+                              id="rezervisi"
+                              variant="outlined"
+                              color="primary"
+                              onClick={() => handleRezervacijaPutovanja(putovanje.id)}
+                              style={{ marginLeft: '10px' }}
+                            >
+                              Rezerviši
+                            </Button>
+                        </StyledCardContent>
+                    </StyledCard>
+                </Grid>
+            ))}
+        </Grid>
     </div>
   );
 };

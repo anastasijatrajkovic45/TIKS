@@ -96,6 +96,7 @@ public class AgencijaContoller : ControllerBase
         if (stari != null)
         {
             stari.Naziv = agencija.Naziv;
+            stari.Grad = agencija.Grad;
             stari.Adresa = agencija.Adresa;
             stari.BrojTelefona = agencija.BrojTelefona;
             stari.Email = agencija.Email;

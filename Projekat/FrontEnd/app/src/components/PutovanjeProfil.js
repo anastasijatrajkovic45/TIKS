@@ -164,8 +164,6 @@ const PutovanjeProfil = () => {
       });
   };
 
-  //za izmenu rezervacije
-
   const handleIzmeniRezervaciju = (rezervacijaId) => {
     const rezervacijaZaIzmenu = reservations.find((reservation) => reservation.id === rezervacijaId);
     setIzmenjeniPodaciR({
@@ -212,6 +210,7 @@ const PutovanjeProfil = () => {
       <Typography variant="h6" gutterBottom style={{ fontFamily: 'sans-serif' }}>
         <Divider variant='h4'>Aktivnosti na putovanju</Divider>
         <Button
+        id="dodajAktivnost"
         variant="contained"
         sx={{backgroundColor: '#900C3F'}}
         style={{
@@ -230,7 +229,7 @@ const PutovanjeProfil = () => {
         <Grid container spacing={3} style={{ marginTop: '20px' }}>
           {aktivnosti.map((aktivnost) => (
             <Grid item xs={12} sm={6} md={4} key={aktivnost.id}>
-              <Card variant="outlined">
+              <Card id="aktivnosti" variant="outlined">
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
                     {aktivnost.naziv}
@@ -239,6 +238,7 @@ const PutovanjeProfil = () => {
                     Cena: {aktivnost.cena}
                   </Typography>
                   <Button
+                    id="obrisiAktivnost"
                     variant="outlined"
                     color="error"
                     onClick={() => handleObrisiAktivnost(aktivnost.id)}
@@ -247,6 +247,7 @@ const PutovanjeProfil = () => {
                     Obriši
                   </Button>
                   <Button
+                    id="izmeniAktivnost"
                     variant="outlined"
                     color="success"
                     onClick={() => handleIzmeniAktivnost(aktivnost.id)}
@@ -270,7 +271,7 @@ const PutovanjeProfil = () => {
       <Grid container spacing={3} style={{ marginTop: '20px' }}>
         {reservations.map((rezervacija) => (
           <Grid item xs={12} sm={6} md={4} key={rezervacija.id}>
-            <Card variant="outlined">
+            <Card id="rezervacije" variant="outlined">
               <CardContent>
                 <Typography variant="body2" gutterBottom>
                   Ime i prezime: {rezervacija.ime} {rezervacija.prezime} 
@@ -285,6 +286,7 @@ const PutovanjeProfil = () => {
                   Broj Osoba: {rezervacija.brojOsoba}
                 </Typography>
                 <Button
+                    id="obrisiRezervaciju"
                     variant="outlined"
                     color="error"
                     onClick={() => handleObrisiRezervaciju(rezervacija.id)}
@@ -293,6 +295,7 @@ const PutovanjeProfil = () => {
                     Obriši
                   </Button>
                 <Button
+                    id="izmeniRezervaciju"
                     variant="outlined"
                     color="success"
                     onClick={() => handleIzmeniRezervaciju(rezervacija.id)}
@@ -313,7 +316,7 @@ const PutovanjeProfil = () => {
           <TextField
             autoFocus
             margin="dense"
-            id="naziv"
+            id="nazivAktivnosti"
             name="naziv"
             label="Naziv"
             type="text"
@@ -323,7 +326,7 @@ const PutovanjeProfil = () => {
           />
           <TextField
             margin="dense"
-            id="cena"
+            id="cenaAktivnosti"
             name="cena"
             label="Cena"
             type="text"
@@ -331,7 +334,7 @@ const PutovanjeProfil = () => {
             value={novaAktivnost.cena}
             onChange={handleChange}
           />
-          <Button variant="contained" sx={{backgroundColor: '#900C3F'}} onClick={handleSubmit}>
+          <Button id="sacuvajAktivnost" variant="contained" sx={{backgroundColor: '#900C3F'}} onClick={handleSubmit}>
             Sačuvaj
           </Button>
         </DialogContent>
@@ -342,7 +345,7 @@ const PutovanjeProfil = () => {
           <TextField
             autoFocus
             margin="dense"
-            id="naziv"
+            id="izmeniNazivAktivnosti"
             name="naziv"
             label="Naziv"
             type="text"
@@ -352,7 +355,7 @@ const PutovanjeProfil = () => {
           />
           <TextField
             margin="dense"
-            id="cena"
+            id="izmeniCenuAktivnosti"
             name="cena"
             label="Cena"
             type="text"
@@ -360,7 +363,7 @@ const PutovanjeProfil = () => {
             value={izmenjeniPodaci.cena}
             onChange={handleIzmenaChange}
           />
-          <Button variant="contained" sx={{backgroundColor: '#900C3F'}} onClick={handleSacuvajIzmenu}>
+          <Button id="sacuvajIzmeneAktivnosti" variant="contained" sx={{backgroundColor: '#900C3F'}} onClick={handleSacuvajIzmenu}>
             Sačuvaj izmene
           </Button>
         </DialogContent>
@@ -441,7 +444,7 @@ const PutovanjeProfil = () => {
             onChange={handleIzmenaChangeR}
           />
 
-          <Button variant="contained" sx={{backgroundColor: '#900C3F'}} onClick={handleSacuvajIzmenuR}>
+          <Button id="sacuvajIzmeneRezervacije" variant="contained" sx={{backgroundColor: '#900C3F'}} onClick={handleSacuvajIzmenuR}>
             Sačuvaj izmene
           </Button>
         </DialogContent>
