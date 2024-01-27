@@ -16,28 +16,17 @@ public class RezervacijaController : ControllerBase
         Context = context;
     }
 
-    [HttpPost]
-    [Route("DodajRezervaciju")]
-    public async Task<ActionResult> DodajRezervaciju([FromBody]Rezervacija rezervacija)
-    {
-        try
-        {
-            await Context.Rezervacije.AddAsync(rezervacija);
-            await Context.SaveChangesAsync();
-            return Ok($"ID nove rezervacije je = {rezervacija.Id}");
-        }
-        catch
-        {
-                return BadRequest("Nije uspelo dodavanje rezervacije!");
-        }
-    }
-
     [HttpPost("DodajRezervacijuPutovanja/{id}")]
     public async Task<ActionResult> DodajRezervacijuPutovanja(int id, Rezervacija rezervacija)
     {
         var putovanje = await Context.Putovanja
             .Include(a => a.Rezervacije)
             .FirstOrDefaultAsync(a => a.Id == id);
+
+        if (rezervacija == null || string.IsNullOrWhiteSpace(rezervacija.Ime) || string.IsNullOrWhiteSpace(rezervacija.Prezime) || rezervacija.BrojOsoba <= 0)
+        {
+            return BadRequest("Nisu uneti svi obavezni podaci.");
+        }
 
         if (putovanje == null)
         {
@@ -72,19 +61,6 @@ public class RezervacijaController : ControllerBase
         return Ok(rezervacija);
     }
 
-    [HttpGet("PreuzmiRezervacije")]
-    public async Task<ActionResult> PreuzmiRezervacije()
-    {
-        try
-        {
-            return Ok(await Context.Putovanja.ToListAsync());
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
-
     [HttpDelete("ObrisiRezervaicju/{id}")]
     public async Task<ActionResult> ObrisiRezervaciju(int id)
     {
@@ -116,9 +92,9 @@ public class RezervacijaController : ControllerBase
             stari.Prezime = rezervacija.Prezime;
             stari.Adresa = rezervacija.Adresa;
             stari.Grad = rezervacija.Grad;
-            stari.BrojTelefona = rezervacija.BrojTelefona;
             stari.Email = rezervacija.Email;
             stari.BrojOsoba = rezervacija.BrojOsoba;
+            stari.BrojTelefona = rezervacija.BrojTelefona;
 
             Context.Rezervacije.Update(stari);
             await Context.SaveChangesAsync();

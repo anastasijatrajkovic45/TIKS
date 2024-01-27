@@ -77,9 +77,15 @@ public class AgencijaContoller : ControllerBase
     [HttpGet("PrezumiAgenciju/{id}")]
     public async Task<ActionResult> PrezumiAgenciju(int id)
     {
-        var agencija = await Context.Agencije.FindAsync(id);
         try
         {
+            var agencija = await Context.Agencije.FindAsync(id);
+
+            if (agencija == null)
+            {
+                return NotFound();
+            }
+
             return Ok(agencija);
         }
         catch (Exception e)
@@ -87,6 +93,7 @@ public class AgencijaContoller : ControllerBase
             return BadRequest(e.Message);
         }
     }
+
 
     [HttpPut("AzurirajAgenciju/{id}")]
     public async Task<ActionResult> AzurirajAgenciju(int id, [FromBody]Agencija agencija)
@@ -96,10 +103,10 @@ public class AgencijaContoller : ControllerBase
         if (stari != null)
         {
             stari.Naziv = agencija.Naziv;
-            stari.Grad = agencija.Grad;
             stari.Adresa = agencija.Adresa;
             stari.BrojTelefona = agencija.BrojTelefona;
             stari.Email = agencija.Email;
+            stari.Grad = agencija.Grad;
 
             Context.Agencije.Update(stari);
             await Context.SaveChangesAsync();

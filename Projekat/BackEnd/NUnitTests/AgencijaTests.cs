@@ -33,15 +33,15 @@ namespace NUnitTests
         }
 
         //DodajAgencija
-        //1.Test: VracaOKStatus
+        //treba da se doda agencija koja nema ovaj isti naziv koja vec postoji!!!!!
         [Test]
         public async Task DodajAgenciju_UspesnoDodavanje_VracaOkStatus()
         {
             Agencija novaAgencija = new Agencija
             {
-                Naziv = "Nova Agencija",
-                Adresa = "Nova Adresa",
-                Grad = "Novi Grad",
+                Naziv = "Agencija",
+                Adresa = "Adresa",
+                Grad = "Grad",
                 Email = "nova@email.com",
                 BrojTelefona = "123456789"
             };
@@ -57,7 +57,6 @@ namespace NUnitTests
             Assert.AreEqual($"ID nove agencije je = {novaAgencija.Id}", okResult?.Value);
         }
 
-        //2.Test: VracaBadRequest jer nema Email i BrojTelefona
         [Test]
         public async Task DodajAgenciju_NeuspesnoDodavanje_VracaBadRequest()
         {
@@ -204,6 +203,7 @@ namespace NUnitTests
             }
         }
 
+
         //preuzima jednu agenciju
         [Test]
         public async Task PrezumiAgenciju_Uspeh_VracaOkStatusSaTacnimPodacima()
@@ -230,6 +230,54 @@ namespace NUnitTests
             Assert.IsNotNull(preuzetaAgencija);
             Assert.AreEqual(novaAgencija.Naziv, preuzetaAgencija.Naziv);
             Assert.AreEqual(novaAgencija.Adresa, preuzetaAgencija.Adresa);
+        }
+
+        [Test]
+        public async Task PrezumiAgenciju_NePostojiAgencijaSaZadatimIdem_VracaNotFoundResult()
+        {
+            var nepostojeciId = 999;
+            var result = await _agencijaController.PrezumiAgenciju(nepostojeciId);
+            Assert.That(result, Is.InstanceOf<NotFoundResult>());
+        }
+
+        [Test]
+        public async Task PrezumiAgenciju_DrugaAgencijaSaValidnimIdem_VracaOkStatusSaTacnimPodacima()
+        {
+            var prvaAgencija = new Agencija
+            {
+                Naziv = "PrvaAgencija",
+                Adresa = "Adresa1",
+                Grad = "Grad1",
+                BrojTelefona = "123456789",
+                Email = "email1@example.com"
+            };
+
+            var drugaAgencija = new Agencija
+            {
+                Naziv = "DrugaAgencija",
+                Adresa = "Adresa2",
+                Grad = "Grad2",
+                BrojTelefona = "987654321",
+                Email = "email2@example.com"
+            };
+
+            await _context.Agencije.AddRangeAsync(prvaAgencija, drugaAgencija);
+            await _context.SaveChangesAsync();
+
+            var result = await _agencijaController.PrezumiAgenciju(drugaAgencija.Id) as OkObjectResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(200, result.StatusCode);
+            Assert.IsNotNull(result.Value);
+
+            var preuzetaAgencija = result.Value as Agencija;
+            Assert.IsNotNull(preuzetaAgencija);
+            Assert.AreEqual(drugaAgencija.Naziv, preuzetaAgencija.Naziv);
+            Assert.AreEqual(drugaAgencija.Adresa, preuzetaAgencija.Adresa);
+            Assert.AreEqual(drugaAgencija.Grad, preuzetaAgencija.Grad);
+            Assert.AreEqual(drugaAgencija.BrojTelefona, preuzetaAgencija.BrojTelefona);
+            Assert.AreEqual(drugaAgencija.Email, preuzetaAgencija.Email);
+
         }
 
         //azuriranje

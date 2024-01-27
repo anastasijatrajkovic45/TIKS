@@ -138,7 +138,7 @@ namespace NUnitTests
         }
 
         [Test]
-        public async Task DodajPutovanjeAgenciji_NepopunjenaPolja_VracaBadRequest()
+        public async Task DodajPutovanjeAgenciji_NeispravneVrednosti_VracaBadRequest()
         {
             Putovanje putovanjeNepopunjeno = new Putovanje
             {
@@ -165,6 +165,36 @@ namespace NUnitTests
             Assert.IsInstanceOf<BadRequestObjectResult>(result);
             Assert.AreEqual("Nisu uneti svi obavezni podaci.", (result as BadRequestObjectResult)?.Value);
         }
+
+        [Test]
+        public async Task DodajPutovanjeAgenciji_NepopunjenaPolja_VracaBadRequest()
+        {
+            Putovanje putovanjeNepopunjeno = new Putovanje
+            {
+                BrojNocenja = 2,
+                Cena = 200,
+                Mesto = "",
+                Slika = "Slika",
+                Prevoz = "Prevoz"
+            };
+
+            Agencija agencija = new Agencija
+            {
+                Naziv = "Naziv",
+                Adresa = "Adresa",
+                Grad = "Grad",
+                Email = "Email",
+                BrojTelefona = "Brojtf"
+            };
+            int agencijaId = agencija.Id;
+            await _context.Agencije.AddAsync(agencija);
+            await _context.SaveChangesAsync();
+
+            var result = await _putovanjeController.DodajPutovanjeAgenciji(putovanjeNepopunjeno, agencijaId);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result);
+            Assert.AreEqual("Nisu uneti svi obavezni podaci.", (result as BadRequestObjectResult)?.Value);
+        }
+
 
         //brisanje
         [Test]

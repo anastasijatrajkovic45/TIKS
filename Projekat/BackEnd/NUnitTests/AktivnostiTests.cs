@@ -61,7 +61,7 @@ namespace NUnitTests
         }
 
         [Test]
-        public async Task DodajAktivnostPutovanju_NepopunjenaPolja_VracaBadRequest()
+        public async Task DodajAktivnostPutovanju_NeispravneVrednosti_VracaBadRequest()
         {
             Putovanje putovanje = new Putovanje
             {
@@ -76,6 +76,31 @@ namespace NUnitTests
             {
                 Naziv = "Naziv",
                 Cena=0
+            };
+            int putovanjeId = putovanje.Id;
+            await _context.Putovanja.AddAsync(putovanje);
+            await _context.SaveChangesAsync();
+
+            var result = await _aktivnostiController.DodajAktivnostUPutovanje(putovanjeId, aktivnost);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result);
+            Assert.AreEqual("Nisu uneti svi obavezni podaci.", (result as BadRequestObjectResult)?.Value);
+        }
+        [Test]
+        public async Task DodajAktivnostPutovanju_NepopunjenaPolja_VracaBadRequest()
+        {
+            Putovanje putovanje = new Putovanje
+            {
+                BrojNocenja = 2,
+                Cena = 200,
+                Mesto = "Mesto",
+                Slika = "Slika",
+                Prevoz = "Prevoz"
+            };
+
+            Aktivnost aktivnost = new Aktivnost
+            {
+                Naziv = "",
+                Cena = 200
             };
             int putovanjeId = putovanje.Id;
             await _context.Putovanja.AddAsync(putovanje);

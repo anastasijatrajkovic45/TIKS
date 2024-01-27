@@ -32,67 +32,6 @@ namespace NUnitTests
 
             _rezervacijaController = new WebTemplate.Controllers.RezervacijaController(_context);
         }
-        //dodavanje
-        [Test]
-        public async Task DodajRezervaciju_UspesnoDodavanje_VracaOkStatus()
-        {
-            Rezervacija rezervacija = new Rezervacija
-            {
-                Ime = "Ime",
-                Prezime = "Prezime",
-                BrojTelefona = "032645",
-                Adresa = "Adresa",
-                Grad = "Grad",
-                Email = "email",
-                BrojOsoba = 3
-            };
-            var rezultat = await _rezervacijaController.DodajRezervaciju(rezervacija);
-
-            Assert.IsInstanceOf<OkObjectResult>(rezultat);
-            var okRezultat = rezultat as OkObjectResult;
-
-            Assert.IsNotNull(rezervacija, "rezervacija nije instancirana.");
-
-            Assert.IsNotNull(rezervacija.Id, "Id nije postavljen nakon dodavanja rezervacije.");
-            Assert.AreEqual($"ID nove rezervacije je = {rezervacija.Id}", okRezultat?.Value);
-        }
-
-        [Test]
-        public async Task DodajRezervaciju_SaIspravnimPodacima_VracaOkStatus()
-        {
-            Rezervacija postojecaRezervacija = new Rezervacija
-            {
-                Ime = "Ime",
-                Prezime = "Prezime",
-                BrojTelefona = "032645",
-                Adresa = "Adresa",
-                Grad = "Grad",
-                Email = "email",
-                BrojOsoba = 3
-            };
-
-            await _context.Rezervacije.AddAsync(postojecaRezervacija);
-            await _context.SaveChangesAsync();
-
-            Rezervacija novaRezervacija = new Rezervacija
-            {
-                Ime = "Ime1",
-                Prezime = "Prezime2",
-                BrojTelefona = "0326453",
-                Adresa = "Adresa2",
-                Grad = "Grad1",
-                Email = "email2",
-                BrojOsoba = 3
-            };
-
-            var result = await _rezervacijaController.DodajRezervaciju(novaRezervacija);
-
-            Assert.IsInstanceOf<OkObjectResult>(result);
-            var okResult = result as OkObjectResult;
-            Assert.IsNotNull(novaRezervacija.Id, "Id nije postavljen nakon dodavanja rezervacije.");
-            Assert.AreEqual($"ID nove rezervacije je = {novaRezervacija.Id}", okResult?.Value);
-        }
-
         //dodavanje rezervacije za putovanje
         [Test]
         public async Task DodajRezervacijuPutovanja_PutovanjeNePostoji()
@@ -122,7 +61,7 @@ namespace NUnitTests
         }
 
         [Test]
-        public async Task DodajRezervacijuPutovanja_NepopunjenaPolja_VracaBadRequest()
+        public async Task DodajRezervacijuPutovanja_NeispravniPodaci_VracaBadRequest()
         {
             Putovanje putovanje = new Putovanje
             {
@@ -142,6 +81,37 @@ namespace NUnitTests
                 Grad="Grad",
                 Email="email",
                 BrojOsoba=0
+            };
+            int putovanjeId = putovanje.Id;
+            await _context.Putovanja.AddAsync(putovanje);
+            await _context.SaveChangesAsync();
+
+            var result = await _rezervacijaController.DodajRezervacijuPutovanja(putovanjeId, rezervacija);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result);
+            Assert.AreEqual("Nisu uneti svi obavezni podaci.", (result as BadRequestObjectResult)?.Value);
+        }
+
+        [Test]
+        public async Task DodajRezervacijuPutovanju_NepopunjenaPolja_VracaBadRequest()
+        {
+            Putovanje putovanje = new Putovanje
+            {
+                BrojNocenja = 2,
+                Cena = 200,
+                Mesto = "Mesto",
+                Slika = "Slika",
+                Prevoz = "Prevoz"
+            };
+
+            Rezervacija rezervacija = new Rezervacija
+            {
+                Ime = "",
+                Prezime = "",
+                BrojTelefona = "032645",
+                Adresa = "Adresa",
+                Grad = "Grad",
+                Email = "email",
+                BrojOsoba = 3
             };
             int putovanjeId = putovanje.Id;
             await _context.Putovanja.AddAsync(putovanje);

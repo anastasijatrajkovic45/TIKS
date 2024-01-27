@@ -60,7 +60,7 @@ namespace NUnitTests
         }
 
         [Test]
-        public async Task DodajRecenzijuPutovanja_NepopunjenaPolja_VracaBadRequest()
+        public async Task DodajRecenzijuPutovanja_NeispravniPodaci_VracaBadRequest()
         {
             Putovanje putovanje = new Putovanje
             {
@@ -76,6 +76,32 @@ namespace NUnitTests
                 Korisnik = "Korisnik",
                 Ocena = 0,
                 Komentar="Komentar"
+            };
+            int putovanjeId = putovanje.Id;
+            await _context.Putovanja.AddAsync(putovanje);
+            await _context.SaveChangesAsync();
+
+            var result = await _recenzijeController.DodajRecenzijuUPutovanje(putovanjeId, recenzija);
+            Assert.IsInstanceOf<BadRequestObjectResult>(result);
+            Assert.AreEqual("Nisu uneti svi obavezni podaci.", (result as BadRequestObjectResult)?.Value);
+        }
+        [Test]
+        public async Task DodajRecenzijuPutovanju_NepopunjenaPolja_VracaBadRequest()
+        {
+            Putovanje putovanje = new Putovanje
+            {
+                BrojNocenja = 2,
+                Cena = 200,
+                Mesto = "Mesto",
+                Slika = "Slika",
+                Prevoz = "Prevoz"
+            };
+
+            Recenzija recenzija = new Recenzija
+            {
+                Korisnik = "",
+                Ocena = 4,
+                Komentar = ""
             };
             int putovanjeId = putovanje.Id;
             await _context.Putovanja.AddAsync(putovanje);
