@@ -39,6 +39,11 @@ public class RezervacijaController : ControllerBase
             .Include(a => a.Rezervacije)
             .FirstOrDefaultAsync(a => a.Id == id);
 
+        if (rezervacija == null || string.IsNullOrWhiteSpace(rezervacija.Ime) || string.IsNullOrWhiteSpace(rezervacija.Prezime) || rezervacija.BrojOsoba <= 0)
+        {
+            return BadRequest("Nisu uneti svi obavezni podaci.");
+        }
+
         if (putovanje == null)
         {
             return NotFound("Putovanje nije pronađena");
