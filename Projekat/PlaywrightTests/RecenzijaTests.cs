@@ -154,4 +154,11 @@ public class RecenzijaTests : PageTest
             Assert.IsFalse(string.IsNullOrEmpty(ocena));
         }
     }
+
+    [TearDown]
+    public async Task Teardown()
+    {
+        await page.CloseAsync();
+        await browser.DisposeAsync();
+    }
 }

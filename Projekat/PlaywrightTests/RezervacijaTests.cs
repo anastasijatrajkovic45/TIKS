@@ -181,4 +181,11 @@ public class RezervacijaTests : PageTest
             Assert.IsFalse(string.IsNullOrEmpty(brojOsoba));
         }
     }
+
+    [TearDown]
+    public async Task Teardown()
+    {
+        await page.CloseAsync();
+        await browser.DisposeAsync();
+    }
 }

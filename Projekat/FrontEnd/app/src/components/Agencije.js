@@ -1,17 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Card,
-  CardContent,
-  Typography,
-  Button,
-  Grid,
-  Divider,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-} from '@mui/material';
+import {Card, CardContent, Typography, Button, Grid, Divider, Dialog, DialogTitle, DialogContent, DialogActions, TextField,} from '@mui/material';
 import { NavLink } from 'react-router-dom';
 
 const Agencije = () => {
@@ -87,6 +75,7 @@ const Agencije = () => {
       <Typography variant="h6" sx={{ marginTop: '10px' }} gutterBottom>
         <Divider>Lista agencija</Divider>
         <Button
+          id="dodajAgenciju"
           variant="contained"
           style={{ margin: '0 auto', display: 'block', marginTop: '10px' }}
           onClick={() => setOpenDodajForma(true)}
@@ -98,7 +87,7 @@ const Agencije = () => {
       <Grid container spacing={2}>
         {agencije.map((agencija) => (
           <Grid item xs={12} sm={6} md={4} key={agencija.id}>
-            <Card variant="outlined" sx={{ borderColor: 'purple', minWidth: '250px', margin: '1px' }}>
+            <Card id="agencije" variant="outlined" sx={{ borderColor: 'purple', minWidth: '250px', margin: '1px' }}>
               <CardContent sx={{ paddingTop: '5px' }}>
                 <Typography variant="h6">{agencija.naziv}</Typography>
                 <Typography variant="body6" color="textSecondary">
@@ -127,12 +116,13 @@ const Agencije = () => {
                   </NavLink>
                 </Divider>
                 <Divider>
-                  <Button sx={{ color: '#B80010' }}  onClick={() => handleObrisiAgenciju(agencija.id)}>
+                  <Button id="obrisi" sx={{ color: '#B80010' }}  onClick={() => handleObrisiAgenciju(agencija.id)}>
                     Obriši
                   </Button>
                 </Divider>
                 <Divider>
                 <Button
+                  id="izmeni"
                   sx={{
                     color: '#B80000',
                     transition: 'box-shadow 0.3s, color 0.3s',
@@ -152,11 +142,11 @@ const Agencije = () => {
         ))}
       </Grid>
 
-      {/* dodavanje agencije */}
       <Dialog open={openDodajForma} onClose={() => setOpenDodajForma(false)}>
         <DialogTitle>Dodaj agenciju</DialogTitle>
         <DialogContent>
           <TextField
+            id="naziv"
             label="Naziv"
             variant="outlined"
             margin="normal"
@@ -164,6 +154,7 @@ const Agencije = () => {
             onChange={(e) => setNovaAgencija({ ...novaAgencija, naziv: e.target.value })}
           />
           <TextField
+            id="adresa"
             label="Adresa"
             variant="outlined"
             margin="normal"
@@ -171,6 +162,7 @@ const Agencije = () => {
             onChange={(e) => setNovaAgencija({ ...novaAgencija, adresa: e.target.value })}
           />
           <TextField
+            id="grad"
             label="Grad"
             variant="outlined"
             margin="normal"
@@ -178,6 +170,7 @@ const Agencije = () => {
             onChange={(e) => setNovaAgencija({ ...novaAgencija, grad: e.target.value })}
           />
           <TextField
+            id="brojTelefona"
             label="Broj telefona"
             variant="outlined"
             margin="normal"
@@ -185,6 +178,7 @@ const Agencije = () => {
             onChange={(e) => setNovaAgencija({ ...novaAgencija, brojTelefona: e.target.value })}
           />
           <TextField
+            id="email"
             label="Email"
             variant="outlined"
             margin="normal"
@@ -196,17 +190,17 @@ const Agencije = () => {
           <Button onClick={() => setOpenDodajForma(false)} color="secondary">
             Odustani
           </Button>
-          <Button onClick={handleDodajAgenciju} color="primary">
+          <Button id="sacuvaj" onClick={handleDodajAgenciju} color="primary">
             Sačuvaj
           </Button>
         </DialogActions>
       </Dialog>
 
-      {/* izmeni agenciju */}
       <Dialog open={openIzmeniForma} onClose={() => setOpenIzmeniForma(false)}>
         <DialogTitle>Izmeni agenciju</DialogTitle>
         <DialogContent>
           <TextField
+            id="nazivIzmeni"
             label="Naziv"
             variant="outlined"
             margin="normal"
@@ -215,6 +209,7 @@ const Agencije = () => {
             onChange={(e) => setNovaAgencija({ ...novaAgencija, naziv: e.target.value })}
           />
           <TextField
+            id="adresaIzmeni"
             label="Adresa"
             variant="outlined"
             margin="normal"
@@ -223,6 +218,7 @@ const Agencije = () => {
             onChange={(e) => setNovaAgencija({ ...novaAgencija, adresa: e.target.value })}
           />
           <TextField
+            id="gradIzmeni"
             label="Grad"
             variant="outlined"
             margin="normal"
@@ -231,6 +227,7 @@ const Agencije = () => {
             onChange={(e) => setNovaAgencija({ ...novaAgencija, grad: e.target.value })}
           />
           <TextField
+            id="brojTelefonaIzmeni"
             label="Broj telefona"
             variant="outlined"
             margin="normal"
@@ -239,6 +236,7 @@ const Agencije = () => {
             onChange={(e) => setNovaAgencija({ ...novaAgencija, brojTelefona: e.target.value })}
           />
           <TextField
+            id="emailIzmeni"
             label="Email"
             variant="outlined"
             margin="normal"
@@ -251,7 +249,7 @@ const Agencije = () => {
           <Button onClick={() => setOpenIzmeniForma(false)} color="secondary">
             Odustani
           </Button>
-          <Button onClick={handleIzmeniAgenciju} color="primary">
+          <Button id="sacuvajIzmene" onClick={handleIzmeniAgenciju} color="primary">
             Sačuvaj
           </Button>
         </DialogActions>

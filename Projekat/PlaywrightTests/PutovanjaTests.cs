@@ -38,41 +38,135 @@ public class PutovanjaTests : PageTest
         });
     }
 
-    //[Test]
-    //public async Task DodajPutovanjeTest()
-    //{
-    //    var agencyId = "2";
-    //    await page.GotoAsync($"http://localhost:3000/Agencije/{agencyId}");
+    [Test]
+    public async Task DodajPutovanjeTest()
+    {
+        var agencijaId = "2";
+        await page.GotoAsync($"http://localhost:3000/Agencije/{agencijaId}");
 
-    //    var mesto = "TestMesto";
-    //    var slika = "https://example.com/test.jpg";
-    //    var brojNocenja = 7;
-    //    var cena = 500;
-    //    var prevoz = "TestPrevoz";
+        await page.ClickAsync("#dodajPutovanje");
 
-    //    await page.ClickAsync("#dodajPutovanje-2");
+        await page.FillAsync("#mesto", "Barselona");
+        await page.FillAsync("#slika", "https://ticketshop.barcelona/images/sights-barcelona.jpg");
+        await page.FillAsync("#brojNocenja", "10");
+        await page.FillAsync("#cena", "500");
+        await page.FillAsync("#prevoz", "avio");
 
-    //    await page.TypeAsync("#mestoPutovanja-1", mesto);
-    //    await page.TypeAsync("#slikaPutovanja-1", slika);
-    //    await page.TypeAsync("#brojNocenjaPutovanja-1", brojNocenja.ToString());
-    //    await page.TypeAsync("#cenaPutovanja-1", cena.ToString());
-    //    await page.TypeAsync("#prevozPutovanja-1", prevoz);
+        await page.ClickAsync("#dodaj");
 
-    //    await page.ClickAsync("#dodajPutovanje-1");
+        await Task.Delay(TimeSpan.FromSeconds(5));
 
-    //    //var successMessage = await page.WaitForSelectorAsync("#successMessage");
-    //    //Assert.NotNull(successMessage);
-    //    await page.ScreenshotAsync(new() { Path = "../../../Slike/dodajPutovanje.png" });
-    //}
+        var karticePutovanja = await page.QuerySelectorAllAsync("#listaPutovanja");
+
+        Assert.IsTrue(karticePutovanja.Count > 0);
+
+        bool putovanjeNadjeno = false;
+        foreach (var kartica in karticePutovanja)
+        {
+            var tekstKarticePutovanja = await kartica.InnerTextAsync();
+            if (tekstKarticePutovanja.Contains("Barselona")
+                && tekstKarticePutovanja.Contains("10")
+                && tekstKarticePutovanja.Contains("500")
+                && tekstKarticePutovanja.Contains("avio"))
+            {
+                putovanjeNadjeno = true;
+                break;
+            }
+        }
+        Assert.IsTrue(putovanjeNadjeno);
+    }
 
     [Test]
-    public async Task PrikazPutovanja()
+    public async Task IzmeniPutovanjeTest()
     {
-        var agencyId = "1";
-        await page.GotoAsync($"http://localhost:3000/Agencije/{agencyId}");
+        var agencijaId = "2";
+        await page.GotoAsync($"http://localhost:3000/Agencije/{agencijaId}");
 
-        var putovanja = await page.QuerySelectorAllAsync("#karticaPutovanja");
+        await page.ClickAsync("#izmeni");
 
-        Assert.True(putovanja.Count > 0);
+        await page.FillAsync("#mestoIzmeni", "Egipat");
+        await page.FillAsync("#slikaIzmeni", "https://www.mediteraneo.rs/pic/bliski_istok_egipatmediteraneo_001_800x457m.jpg");
+        await page.FillAsync("#prevozIzmeni", "avio");
+        await page.FillAsync("#brojNocenjaIzmeni", "9");
+        await page.FillAsync("#cenaIzmeni", "950");
+
+        await page.ClickAsync("#sacuvajIzmene");
+
+        await Task.Delay(TimeSpan.FromSeconds(2));
+
+        var karticePutovanja = await page.QuerySelectorAllAsync("#listaPutovanja");
+
+        Assert.IsTrue(karticePutovanja.Count > 0);
+
+        bool putovanjeNadjeno = false;
+        foreach (var kartica in karticePutovanja)
+        {
+            var tekstKarticePutovanja = await kartica.InnerTextAsync();
+            if (tekstKarticePutovanja.Contains("Egipat")
+                && tekstKarticePutovanja.Contains("9")
+                && tekstKarticePutovanja.Contains("950")
+                && tekstKarticePutovanja.Contains("avio"))
+            {
+                putovanjeNadjeno = true;
+                break;
+            }
+        }
+        Assert.IsTrue(putovanjeNadjeno);
+    }
+
+    [Test]
+    public async Task ObrisiPutovanjeTest()
+    {
+        var agencijaId = "2";
+        await page.GotoAsync($"http://localhost:3000/Agencije/{agencijaId}");
+
+        var karticePutovanja = await page.QuerySelectorAllAsync("#listaPutovanja");
+
+        Assert.IsTrue(karticePutovanja.Count > 0);
+
+        var prvaKartica = karticePutovanja[0];
+        var dugmeZaBrisanje = await prvaKartica.QuerySelectorAsync("#obrisi");
+        await dugmeZaBrisanje.ClickAsync();
+
+        await Task.Delay(TimeSpan.FromSeconds(2));
+
+        karticePutovanja = await page.QuerySelectorAllAsync("#listaPutovanja");
+
+        Assert.IsFalse(karticePutovanja.Contains(prvaKartica));
+    }
+
+    [Test]
+    public async Task PreuzmiPutovanjaAgencijeTest()
+    {
+        var agencijaId = "1";
+        await page.GotoAsync($"http://localhost:3000/Agencije/{agencijaId}");
+
+        await page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        var karticePutovanja = await page.QuerySelectorAllAsync("#listaPutovanja");
+
+        Assert.IsTrue(karticePutovanja.Count > 0);
+
+        foreach (var kartica in karticePutovanja)
+        {
+            var mesto = await kartica.InnerTextAsync();
+            var slika = await kartica.InnerTextAsync();
+            var brojNocenja = await kartica.InnerTextAsync();
+            var prevoz = await kartica.InnerTextAsync();
+            var cena = await kartica.InnerTextAsync();
+
+            Assert.IsFalse(string.IsNullOrEmpty(mesto));
+            Assert.IsFalse(string.IsNullOrEmpty(slika));
+            Assert.IsFalse(string.IsNullOrEmpty(brojNocenja));
+            Assert.IsFalse(string.IsNullOrEmpty(prevoz));
+            Assert.IsFalse(string.IsNullOrEmpty(cena));
+        }
+    }
+
+    [TearDown]
+    public async Task Teardown()
+    {
+        await page.CloseAsync();
+        await browser.DisposeAsync();
     }
 }

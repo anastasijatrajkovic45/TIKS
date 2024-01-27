@@ -201,6 +201,7 @@ const handleSacuvajIzmene = async (e) => {
         <Typography variant="h6">Izmeni putovanje</Typography>
         <form onSubmit={handleSacuvajIzmene} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <TextField
+            id="mestoIzmeni"
             label="Mesto"
             variant="outlined"
             value={izmenjeniPodaci.mesto}
@@ -210,6 +211,7 @@ const handleSacuvajIzmene = async (e) => {
             style={{ marginBottom: '10px', width: '300px' }}
           />
           <TextField
+            id="slikaIzmeni"
             label="URL slike"
             variant="outlined"
             value={izmenjeniPodaci.slika}
@@ -219,6 +221,7 @@ const handleSacuvajIzmene = async (e) => {
             style={{ marginBottom: '10px', width: '300px' }}
           />
           <TextField
+            id="prevozIzmeni"
             label="Prevoz"
             variant="outlined"
             value={izmenjeniPodaci.prevoz}
@@ -228,6 +231,7 @@ const handleSacuvajIzmene = async (e) => {
             style={{ marginBottom: '10px', width: '300px' }}
           />
           <TextField
+            id="brojNocenjaIzmeni"
             label="Broj noćenja"
             variant="outlined"
             type="number"
@@ -238,6 +242,7 @@ const handleSacuvajIzmene = async (e) => {
             style={{ marginBottom: '10px', width: '300px' }}
           />
           <TextField
+            id="cenaIzmeni"
             label="Cena"
             variant="outlined"
             type="number"
@@ -247,13 +252,14 @@ const handleSacuvajIzmene = async (e) => {
             }
             style={{ marginBottom: '20px', width: '300px' }}
           />
-          <Button type="submit" variant="contained" sx={{ backgroundColor: '#900C3F'}}>
+          <Button id="sacuvajIzmene" type="submit" variant="contained" sx={{ backgroundColor: '#900C3F'}}>
             Sačuvaj izmene
           </Button>
         </form>
       </div>
     )}
     <Divider><Button
+      id="dodajPutovanje"
       variant="contained"
       sx={{ backgroundColor: '#900C3F'}}
       onClick={() => setDodavanjeAktivno(true)}
@@ -360,6 +366,7 @@ const handleSacuvajIzmene = async (e) => {
           style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
         >
           <TextField
+            id="mesto"
             label="Mesto"
             variant="outlined"
             value={noviPodaci.mesto}
@@ -369,6 +376,7 @@ const handleSacuvajIzmene = async (e) => {
             style={{ marginBottom: '10px', width: '300px' }}
           />
           <TextField
+            id="slika"
             label="URL slike"
             variant="outlined"
             value={noviPodaci.slika}
@@ -378,6 +386,7 @@ const handleSacuvajIzmene = async (e) => {
             style={{ marginBottom: '10px', width: '300px' }}
           />
           <TextField
+            id="brojNocenja"
             label="Broj nocenja"
             variant="outlined"
             value={noviPodaci.brojNocenja}
@@ -387,6 +396,7 @@ const handleSacuvajIzmene = async (e) => {
             style={{ marginBottom: '10px', width: '300px' }}
           />
           <TextField
+            id="cena"
             label="Cena"
             variant="outlined"
             value={noviPodaci.cena}
@@ -396,6 +406,7 @@ const handleSacuvajIzmene = async (e) => {
             style={{ marginBottom: '10px', width: '300px' }}
           />
           <TextField
+            id="prevoz"
             label="Prevoz"
             variant="outlined"
             value={noviPodaci.prevoz}
@@ -404,7 +415,7 @@ const handleSacuvajIzmene = async (e) => {
             }
             style={{ marginBottom: '10px', width: '300px' }}
           />
-          <Button type="submit" variant="contained" sx={{ backgroundColor: '#900C3F'}}>
+          <Button id="dodaj" type="submit" variant="contained" sx={{ backgroundColor: '#900C3F'}}>
             Dodaj putovanje
           </Button>
         </form>
@@ -416,7 +427,7 @@ const handleSacuvajIzmene = async (e) => {
       <Grid container spacing={3}>
             {putovanja.map((putovanje) => (
                 <Grid item key={putovanje.id} xs={12} sm={6} md={4}>
-                    <StyledCard>
+                    <StyledCard id="listaPutovanja">
                         <StyledCardImage src={putovanje.slika} alt={putovanje.mesto}/>
                         <StyledCardContent>
                         <Typography variant="h6" component="div" sx={{ display: 'flex', justifyContent: 'space-between', paddingRight: '16px' }}>
@@ -444,6 +455,7 @@ const handleSacuvajIzmene = async (e) => {
                             </NavLink>
                             <Divider style={{ margin: '10px 0' }} />
                             <Button
+                              id="obrisi"
                               variant="outlined"
                               color="error"
                               onClick={() => handleObrisiPutovanje(putovanje.id)}
@@ -451,6 +463,7 @@ const handleSacuvajIzmene = async (e) => {
                               Obriši
                             </Button>
                             <Button
+                              id="izmeni"
                               variant="outlined"
                               color="success"
                               onClick={() => handleIzmeniPutovanje(putovanje.id)}
