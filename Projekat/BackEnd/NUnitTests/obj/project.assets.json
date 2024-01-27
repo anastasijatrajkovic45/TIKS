@@ -4887,19 +4887,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\PC\\.nuget\\packages\\": {}
+    "C:\\Users\\ANASTASIJA\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\PC\\Documents\\IV godina\\VII\\TIKS\\Aplikacija\\Projekat\\BackEnd\\NUnitTests\\NUnitTests.csproj",
+      "projectUniqueName": "C:\\Users\\ANASTASIJA\\Desktop\\Fakultet\\VII semestar\\Testiranje i kvalitet softvera\\Projekat\\BackEnd\\NUnitTests\\NUnitTests.csproj",
       "projectName": "NUnitTests",
-      "projectPath": "C:\\Users\\PC\\Documents\\IV godina\\VII\\TIKS\\Aplikacija\\Projekat\\BackEnd\\NUnitTests\\NUnitTests.csproj",
-      "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\PC\\Documents\\IV godina\\VII\\TIKS\\Aplikacija\\Projekat\\BackEnd\\NUnitTests\\obj\\",
+      "projectPath": "C:\\Users\\ANASTASIJA\\Desktop\\Fakultet\\VII semestar\\Testiranje i kvalitet softvera\\Projekat\\BackEnd\\NUnitTests\\NUnitTests.csproj",
+      "packagesPath": "C:\\Users\\ANASTASIJA\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ANASTASIJA\\Desktop\\Fakultet\\VII semestar\\Testiranje i kvalitet softvera\\Projekat\\BackEnd\\NUnitTests\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\ANASTASIJA\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4913,8 +4918,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\PC\\Documents\\IV godina\\VII\\TIKS\\Aplikacija\\Projekat\\BackEnd\\WebTemplate\\WebTemplate.csproj": {
-              "projectPath": "C:\\Users\\PC\\Documents\\IV godina\\VII\\TIKS\\Aplikacija\\Projekat\\BackEnd\\WebTemplate\\WebTemplate.csproj"
+            "C:\\Users\\ANASTASIJA\\Desktop\\Fakultet\\VII semestar\\Testiranje i kvalitet softvera\\Projekat\\BackEnd\\WebTemplate\\WebTemplate.csproj": {
+              "projectPath": "C:\\Users\\ANASTASIJA\\Desktop\\Fakultet\\VII semestar\\Testiranje i kvalitet softvera\\Projekat\\BackEnd\\WebTemplate\\WebTemplate.csproj"
             }
           }
         }
@@ -4974,7 +4979,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

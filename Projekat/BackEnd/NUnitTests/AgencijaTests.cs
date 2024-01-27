@@ -165,7 +165,6 @@ namespace NUnitTests
         }
 
         //PreuzmiAgencije
-        //1.Test
         [Test]
         public async Task PrezumiAgencije_UspesnoPreuzimanje_VracaOKStatus()
         {
@@ -186,12 +185,26 @@ namespace NUnitTests
 
             Assert.AreEqual(_context.Agencije.Count(), preuzeteAgencije.Count);
         }
+        [Test]
+        public async Task PreuzmiAgencije_PraznaLista()
+        {
+            var dbContextOptions = new DbContextOptionsBuilder<Context>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
 
-        //2.Test:
-        //3.Test:
+            using (var context = new Context(dbContextOptions))
+            {
+                var controller = new AgencijaContoller(context);
+                var result = await controller.PrezumiAgencije();
 
-        //PreuzmiAgenciju
-        //1.Test:
+                Assert.IsInstanceOf<OkObjectResult>(result);
+                var okObjectResult = (OkObjectResult)result;
+                var agencije = (List<Agencija>)okObjectResult.Value;
+                Assert.IsEmpty(agencije);
+            }
+        }
+
+        //preuzima jednu agenciju
         [Test]
         public async Task PrezumiAgenciju_Uspeh_VracaOkStatusSaTacnimPodacima()
         {
@@ -219,6 +232,80 @@ namespace NUnitTests
             Assert.AreEqual(novaAgencija.Adresa, preuzetaAgencija.Adresa);
         }
 
-        //2.Test:
+        //azuriranje
+        [Test]
+        public async Task AzurirajAgenciju_VracaOkSaPorukom()
+        {
+            var options = new DbContextOptionsBuilder<Context>()
+                .UseInMemoryDatabase(databaseName: "Putovanje")
+                .Options;
+            int agencijaId;
+
+            using (var context = new Context(options))
+            {
+                Agencija agencija = new Agencija { Naziv = "Test Agencija", Adresa = "Test Adresa", Grad = "Test Grad", BrojTelefona = "4552", Email = "email@gmail.com" };
+                context.Agencije.Add(agencija);
+                context.SaveChanges();
+                agencijaId = agencija.Id;
+            }
+
+            using (var context = new Context(options))
+            {
+                var controller = new AgencijaContoller(context);
+                var updatedAgenciju = new Agencija { Naziv = "Test Agencija1", Adresa = "Test Adresa1", Grad = "Test Grad1", BrojTelefona = "45521", Email = "email1@gmail.com" };
+
+                var result = await controller.AzurirajAgenciju(agencijaId, updatedAgenciju);
+
+                Assert.IsInstanceOf<OkObjectResult>(result);
+                Assert.AreEqual($"Azurirana je agencija sa ID = {agencijaId}", (result as OkObjectResult)?.Value);
+            }
+        }
+
+        [Test]
+        public async Task AzurirajAgenciju_NepostojeciId_VracaBadRequest()
+        {
+            var options = new DbContextOptionsBuilder<Context>()
+                .UseInMemoryDatabase(databaseName: "Putovanje")
+                .Options;
+
+            using (var context = new Context(options))
+            {
+                var controller = new AgencijaContoller(context);
+                var updatedAgenciju = new Agencija { Naziv = "Test Agencija1", Adresa = "Test Adresa1", Grad = "Test Grad1", BrojTelefona = "45521", Email = "email1@gmail.com" };
+
+                var result = await controller.AzurirajAgenciju(999, updatedAgenciju);
+
+                Assert.IsInstanceOf<BadRequestObjectResult>(result);
+                Assert.AreEqual("Nije uspelo azuriranje agencije!", (result as BadRequestObjectResult)?.Value);
+            }
+        }
+
+        [Test]
+        public async Task AzurirajAgenciju_ValidIdAndValidPutovanje_VracaOkSaPorukom()
+        {
+            var options = new DbContextOptionsBuilder<Context>()
+                .UseInMemoryDatabase(databaseName: "Putovanje")
+                .Options;
+            int agencijaId;
+            using (var context = new Context(options))
+            {
+                var agencija = new Agencija { Naziv = "Test Agencija1", Adresa = "Test Adresa1", Grad = "Test Grad1", BrojTelefona = "45521", Email = "email1@gmail.com" };
+                context.Agencije.Add(agencija);
+                context.SaveChanges();
+
+                agencijaId = agencija.Id;
+            }
+
+            using (var context = new Context(options))
+            {
+                var controller = new AgencijaContoller(context);
+                var updatedAgencija = new Agencija { Naziv = "Test Agencija", Adresa = "Test Adresa", Grad = "Test Grad", BrojTelefona = "4552", Email = "email@gmail.com" };
+
+                var result = await controller.AzurirajAgenciju(agencijaId, updatedAgencija);
+
+                Assert.IsInstanceOf<OkObjectResult>(result);
+                Assert.AreEqual($"Azurirana je agencija sa ID = {agencijaId}", (result as OkObjectResult)?.Value);
+            }
+        }
     }
 }
