@@ -27,3 +27,6 @@
   - npm install
   - npm install @mui/icons-material
   - npm start
+
+# NUnit Tests
+# Playwright Tests
