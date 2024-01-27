@@ -239,7 +239,7 @@ const Recenzije = () => {
               starSpacing="2px"
             />
           </Box> */}
-          <Button id="sacuvaj" variant="contained" sx={{backgroundColor: '#900C3F'}} onClick={handleSubmit}>
+          <Button id="sacuvajDodavanje" variant="contained" sx={{backgroundColor: '#900C3F'}} onClick={handleSubmit}>
             Sačuvaj
           </Button>
         </DialogContent>
