@@ -146,4 +146,11 @@ public class AktivnostTests : PageTest
             Assert.IsFalse(string.IsNullOrEmpty(cena));
         }
     }
+
+    [TearDown]
+    public async Task Teardown()
+    {
+        await page.CloseAsync();
+        await browser.DisposeAsync();
+    }
 }
