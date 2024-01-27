@@ -13,7 +13,7 @@
 
 # Clone repository
  - git clone https://github.com/stojanovicc/TIKS.git
- - cd NBP
+ - cd Projekat
 
 # SQL Server
  - sqllocadlb create Putovanje
