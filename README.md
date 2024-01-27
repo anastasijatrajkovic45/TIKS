@@ -16,7 +16,7 @@
  - cd Projekat
 
 # SQL Server
- - sqllocadlb create Putovanje
+ - sqllocaldb create Putovanje
  - sqllocaldb start Putovanje
 
 # Server start
