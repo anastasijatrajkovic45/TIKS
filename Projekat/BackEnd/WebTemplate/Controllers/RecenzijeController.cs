@@ -23,11 +23,6 @@ public class RecenzijaController : ControllerBase
             .Include(a => a.Recenzije)
             .FirstOrDefaultAsync(a => a.Id == id);
 
-        if (recenzija == null || string.IsNullOrWhiteSpace(recenzija.Korisnik) || string.IsNullOrWhiteSpace(recenzija.Komentar) || recenzija.Ocena <= 0 || recenzija.Ocena >= 10)
-        {
-            return BadRequest("Nisu uneti svi obavezni podaci.");
-        }
-
         if (putovanje == null)
         {
             return NotFound("Putovanje nije pronađeno.");

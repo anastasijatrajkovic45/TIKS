@@ -11,26 +11,18 @@ using Microsoft.Extensions.Logging;
 public class PutovanjeController : ControllerBase
 {
     public Context Context { get; set; }
-    //private readonly ILogger<PutovanjeController> _logger;
+    private readonly ILogger<PutovanjeController> _logger;
 
-    //public PutovanjeController(Context context, ILogger<PutovanjeController> logger)
-    //{
-    //    Context = context;
-    //    _logger = logger;
-    //}
-    public PutovanjeController (Context context)
+    public PutovanjeController(Context context, ILogger<PutovanjeController> logger)
     {
         Context = context;
+        _logger = logger;
     }
 
     [HttpPost]
     [Route("DodajPutovanje")]
     public async Task<ActionResult> DodajPutovanje([FromBody]Putovanje putovanje)
     {
-        if (putovanje == null || string.IsNullOrWhiteSpace(putovanje.Mesto) || string.IsNullOrWhiteSpace(putovanje.Slika) || string.IsNullOrWhiteSpace(putovanje.Prevoz) || putovanje.BrojNocenja <= 0 || putovanje.Cena <= 0)
-        {
-            return BadRequest("Nisu uneti svi obavezni podaci.");
-        }
         try
         {
             await Context.Putovanja.AddAsync(putovanje);
@@ -50,28 +42,23 @@ public class PutovanjeController : ControllerBase
         var agencija = await Context.Agencije
             .Include(a => a.Putovanje)
             .FirstOrDefaultAsync(a => a.Id == id);
-        if (putovanje == null || string.IsNullOrWhiteSpace(putovanje.Mesto) || string.IsNullOrWhiteSpace(putovanje.Slika) || string.IsNullOrWhiteSpace(putovanje.Prevoz) || putovanje.BrojNocenja <= 0 || putovanje.Cena <= 0)
-        {
-            return BadRequest("Nisu uneti svi obavezni podaci.");
-        }
 
         if (agencija == null)
         {
             return NotFound("Agencija nije pronađena");
         }
         agencija.Putovanje!.Add(putovanje);
-
+        
         try
         {
             await Context.SaveChangesAsync();
-            return Ok(new { Message = "Putovanje za agenciju je uspesno dodato." });
+            return Ok("Putovanje za agenciju je uspesno dodato.");
         }
         catch (Exception ex)
         {
             return StatusCode(500, $"Greška prilikom dodavanja putovanja agenciji: {ex.Message}");
         }
     }
-
 
     [HttpDelete("ObrisiPutovanje/{id}")]
     public async Task<ActionResult> ObrisiPutovanje(int id)
@@ -104,6 +91,7 @@ public class PutovanjeController : ControllerBase
             return BadRequest(e.Message);
         }
     }
+
     
     [HttpGet("PreuzmiPutovanjaAgencije/{id}")]
     public async Task<ActionResult> PreuzmiPutovanjaAgencije(int id)
@@ -140,7 +128,7 @@ public class PutovanjeController : ControllerBase
         }
         else
         {
-            return BadRequest("Nije uspelo azuriranje putovanja!");
+            return BadRequest("Nije uspeslo azuriranje putovanja!");
         }
     }
 }

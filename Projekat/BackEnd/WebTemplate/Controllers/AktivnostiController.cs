@@ -22,10 +22,6 @@ public class AktivnostiController : ControllerBase
         var putovanje = await Context.Putovanja
             .Include(a => a.Aktivnosti)
             .FirstOrDefaultAsync(a => a.Id == id);
-        if (aktivnost == null || string.IsNullOrWhiteSpace(aktivnost.Naziv) || aktivnost.Cena <= 0)
-        {
-            return BadRequest("Nisu uneti svi obavezni podaci.");
-        }
 
         if (putovanje == null)
         {
