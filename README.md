@@ -12,7 +12,7 @@
  - Playwright Tests
 
 # Clone repository
- - git clone https://github.com/stojanovicc/NBP.git
+ - git clone https://github.com/stojanovicc/TIKS.git
  - cd NBP
 
 # SQL Server
