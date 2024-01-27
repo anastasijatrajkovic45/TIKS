@@ -41,7 +41,7 @@ public class PutovanjaTests : PageTest
     [Test]
     public async Task DodajPutovanjeTest()
     {
-        var agencijaId = "2";
+        var agencijaId = "1";
         await page.GotoAsync($"http://localhost:3000/Agencije/{agencijaId}");
 
         await page.ClickAsync("#dodajPutovanje");
@@ -79,7 +79,7 @@ public class PutovanjaTests : PageTest
     [Test]
     public async Task IzmeniPutovanjeTest()
     {
-        var agencijaId = "2";
+        var agencijaId = "1";
         await page.GotoAsync($"http://localhost:3000/Agencije/{agencijaId}");
 
         await page.ClickAsync("#izmeni");
@@ -117,7 +117,7 @@ public class PutovanjaTests : PageTest
     [Test]
     public async Task ObrisiPutovanjeTest()
     {
-        var agencijaId = "2";
+        var agencijaId = "22";
         await page.GotoAsync($"http://localhost:3000/Agencije/{agencijaId}");
 
         var karticePutovanja = await page.QuerySelectorAllAsync("#listaPutovanja");

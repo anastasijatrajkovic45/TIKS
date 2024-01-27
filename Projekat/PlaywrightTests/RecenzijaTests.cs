@@ -48,7 +48,7 @@ public class RecenzijaTests : PageTest
 
         await page.FillAsync("#korisnik", "Jana");
         await page.FillAsync("#komentar", "Super putovanje!");
-        await page.FillAsync("#ocena", "10");
+        await page.FillAsync("#ocena", "5");
 
         await page.ClickAsync("#sacuvaj");
 
@@ -64,7 +64,7 @@ public class RecenzijaTests : PageTest
             var tekstKarticeRecenzija = await kartica.InnerTextAsync();
             if (tekstKarticeRecenzija.Contains("Jana")
                 && tekstKarticeRecenzija.Contains("Super putovanje!")
-                && tekstKarticeRecenzija.Contains("10"))
+                && tekstKarticeRecenzija.Contains("5"))
             {
                 recenzijaNadjena = true;
                 break;
