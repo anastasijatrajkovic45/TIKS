@@ -6,7 +6,7 @@
 
 # Stack
  - SQL Server
- - Asp.net WebApi
+ - .net WebApi
  - React(JS)
  - NUnit Tests
  - Playwright Tests
